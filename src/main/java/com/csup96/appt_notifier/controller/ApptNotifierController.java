@@ -31,11 +31,4 @@ public class ApptNotifierController {
 	public String login() {
 		return "login";
 	}
-	
-	
-	@GetMapping("/exp")
-	public String exp() {
-		return "exp"; // templates/index.mustache 이동
-	}
-	
 }

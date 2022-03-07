@@ -8,22 +8,14 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   
+  <!-- DatePicker --> 
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>  
-  
   <!-- DatePicker -->  
- <!--  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
- 
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>  -->
-  <!-- DatePicker -->  
+
 <style>
 .popover {
     left: 40% !important;
@@ -42,14 +34,13 @@
   <form>
   	<div class="form-group">
  	  <label for="appt-time" class="form-label">날짜와 시간</label>      
-	  	<input type="hidden" class="form-control" id="appt-time" name="appt-time">    
+	  <!--<input type="hidden" class="form-control" id="appt-time" name="appt-time">-->
 	    	
-	    <div class="date-picker-2" id="appt" aria-describedby="basic-addon2"></div> <!-- inline display -->
-	    
-	    <!-- <span id="example-popover-2"></span> -->
-	    <span id="appt-popover"></span> 
-	    <div id="appt-popover-content" class="hidden"> </div>
-	    <div id="appt-popover-title" class="hidden"> </div>
+	  <div class="date-picker-2" id="appt-date" aria-describedby="basic-addon2"></div> <!-- inline display -->
+	  <!-- <span id="example-popover-2"></span> -->
+	  <span id="appt-popover"></span> 
+      <div id="appt-popover-content" class="hidden"> </div>
+	  <div id="appt-popover-title" class="hidden"> </div>
     </div>  
   
 <!--   	<div class="form-group">
@@ -77,6 +68,5 @@
 </div>
 </body>
   
-<!-- 직접 만들 자바스크립프 파일 -->
 <script src="index.js"></script> 
 </html>

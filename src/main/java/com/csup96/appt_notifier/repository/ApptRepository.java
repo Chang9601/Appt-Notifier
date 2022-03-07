@@ -13,7 +13,7 @@ public interface ApptRepository extends JpaRepository<Appointment, Integer> {
 	@Query(value = "SELECT * FROM appointment WHERE client_name = :name AND client_phone = :phone", nativeQuery = true)
 	Appointment findByNameAndPhone(@Param("name") String name, @Param("phone") String phone);
 	
-	@Modifying
+	@Modifying 	// executeUpdate 실행
 	@Transactional
 	@Query(value = "DELETE FROM appointment WHERE client_name = :name AND client_phone = :phone", nativeQuery = true)
 	void deleteByNameAndPhone(@Param("name") String name, @Param("phone") String phone);

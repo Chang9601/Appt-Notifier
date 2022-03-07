@@ -17,7 +17,7 @@ public class ApptService {
 	ApptRepository apptRepository;
 	
 	// 예약하기
-	public void join(Appointment appointment) {
+	public void save(Appointment appointment) {
 		apptRepository.save(appointment);
 	}
 	
