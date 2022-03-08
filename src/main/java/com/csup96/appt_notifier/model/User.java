@@ -23,8 +23,6 @@ public class User {
 	@Id // 기본 키
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 DB에 위임
 	private int id; 
-
-	private int interval; // 예약 단위 -> 오류
 	
 	@Column(nullable = false, length = 100)
 	private String username; // 이름
@@ -34,10 +32,4 @@ public class User {
 	
 	@Enumerated(EnumType.STRING)
 	private RoleType role; // 관리자(ADMIN)
-	
-	@Column(nullable = false, length = 50)
-	private String openTime; // 여는 시간 
-	
-	@Column(nullable = false, length = 50)
-	private String closeTime; // 닫는 시간
 }
