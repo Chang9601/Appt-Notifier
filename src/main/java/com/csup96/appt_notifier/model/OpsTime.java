@@ -28,6 +28,7 @@ public class OpsTime {
 	@Column(nullable = false, length = 50)
 	private String closeTime; // 닫는 시간
 	
-	@Column(nullable = false)
 	private int apptInterval; // interval가 MySQL 예약어라서 오류 발생!
+	
+	// 휴식 시간
 }

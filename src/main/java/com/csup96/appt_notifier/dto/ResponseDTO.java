@@ -1,6 +1,5 @@
 package com.csup96.appt_notifier.dto;
 
-import org.springframework.http.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class ResponseDTO<T> {
-	HttpStatus status;
+	int status;
 	T data;
 }

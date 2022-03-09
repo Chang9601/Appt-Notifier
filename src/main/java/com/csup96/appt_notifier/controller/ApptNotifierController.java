@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.csup96.appt_notifier.service.ApptService;
+import com.csup96.appt_notifier.service.OpsTimeService;
 
 @Controller
 public class ApptNotifierController {
@@ -16,8 +17,14 @@ public class ApptNotifierController {
 	@Autowired
 	private ApptService apptService;
 	
+	@Autowired
+	private OpsTimeService opsTimeService;
+	
+	private final int id = 1;
+	
 	@GetMapping("/index")
-	public String index() {
+	public String index(Model model) {
+		model.addAttribute("ops-time", opsTimeService.findById(id));
 		return "index"; // templates/index.mustache 이동
 	}
 	

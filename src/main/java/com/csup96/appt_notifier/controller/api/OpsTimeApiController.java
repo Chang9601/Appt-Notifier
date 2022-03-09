@@ -10,35 +10,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.csup96.appt_notifier.dto.ResponseDTO;
-import com.csup96.appt_notifier.model.User;
-import com.csup96.appt_notifier.service.UserService;
+import com.csup96.appt_notifier.model.OpsTime;
+import com.csup96.appt_notifier.service.OpsTimeService;
 
-@RequestMapping("/api/user/*")
+@RequestMapping("/api/ops-time/*")
 @RestController
-public class UserApiController {
+public class OpsTimeApiController {
 	
 	@Autowired
-	private UserService userService;
+	private OpsTimeService opsTimeService;
 	
-	// 관리자는 1개, 따라서 고정
-	private final int id = 1;
-
+	// 관리시간은 1개, 따라서 고정
+	private final int id = 1;	
+	
 	@PostMapping("/save")
-	public ResponseDTO<Integer> save(@RequestBody User user) {
-		userService.save(user);
+	public ResponseDTO<Integer> save(@RequestBody OpsTime opsTime) {
+		opsTimeService.save(opsTime);
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}
 	
 	@GetMapping("/find")
-	public ResponseDTO<User> find() {
-		User persistence = userService.findById(id);
-		return new ResponseDTO<User>(HttpStatus.OK.value(), persistence);
+	public ResponseDTO<OpsTime> find(OpsTime opsTime) {
+		OpsTime persistence = opsTimeService.findById(id);
+		return new ResponseDTO<OpsTime>(HttpStatus.OK.value(), persistence);
 	}
 	
 	@PutMapping("/update")
-	public ResponseDTO<Integer> update(@RequestBody User user) {
-		user.setId(id); // 아이디 설정
-		userService.update(user);
+	public ResponseDTO<Integer> update(@RequestBody OpsTime opsTime) {
+		opsTime.setId(id);
+		opsTimeService.update(opsTime);
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}
 }

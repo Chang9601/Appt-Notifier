@@ -29,12 +29,14 @@
 <body>
 
 <div class="container mt-3">
-  <h2>영업 시간: 09:00 - 20:00</h2>
+  <h2>영업 시간: {{ops-time.openTime}} - {{ops-time.closeTime}}</h2>
   <br />
   <form>
   	<div class="form-group">
  	  <label for="appt-time" class="form-label">날짜와 시간</label>      
-	  <!--<input type="hidden" class="form-control" id="appt-time" name="appt-time">-->
+	  <input type="hidden" class="form-control" id="open-time" name="open-time" value="{{ops-time.openTime}}">
+	  <input type="hidden" class="form-control" id="close-time" name="close-time" value="{{ops-time.closeTime}}">
+	  <input type="hidden" class="form-control" id="appt-interval" name="appt-interval" value="{{ops-time.apptInterval}}">
 	    	
 	  <div class="date-picker-2" id="appt-date" aria-describedby="basic-addon2"></div> <!-- inline display -->
 	  <!-- <span id="example-popover-2"></span> -->
@@ -50,12 +52,12 @@
     
   	<div class="form-group">
 	  <label for="client-name" class="form-label">이름</label>
-	  <input type="text" class="form-control" placeholder="이름을 입력하세요.(e.g. 홍길동)" id="client-name">
+	  <input type="text" class="form-control" placeholder="홍길동" id="client-name">
 	</div>    
 	
   	<div class="form-group">
 	  <label for="client-phone" class="form-label">전화번호</label>      
-      <input type="text" class="form-control" placeholder="전화번호를 입력하세요.(e.g. 010-1234-5678)" id="client-phone">
+      <input type="text" class="form-control" placeholder="010-1234-5678" id="client-phone">
     </div>
     <br />
     

@@ -33,6 +33,16 @@ const validateClient = (clientName, clientPhone) => {
 	return true;
 };
 
+const parseTime = (apptTime) => {
+	apptTime = apptTime.split(':');
+	
+	// 문자열 -> 숫자 변환
+	let hour = parseInt(apptTime[0], 10);
+	let minute = parseInt(apptTime[1], 10);
+		
+	return hour * 60 + minute;
+};
+
 $(function() {
 	// 모든 date picker의 기본값 설정
 	$.datepicker.setDefaults({
@@ -65,21 +75,46 @@ $(function() {
 
 		onSelect: function(date) {
 			let dateArr = date.split('-');
-			let y, m, d;
+			let year, month, day;
+			
+			let openTime = parseTime(document.querySelector('#open-time').value); 
+			let closeTime =  parseTime(document.querySelector('#close-time').value); 
+			let apptInterval = parseInt(document.querySelector('#appt-interval').value); // 문자열 -> 숫자 변환
+			
+			let html = '';
+			let cnt = 0;
+			
+			for(initTime = openTime; initTime < closeTime; initTime += apptInterval) {
+				let startHour = Math.floor(initTime / 60); 
+				let startMinute = initTime % 60;
+				
+				if(startHour < 10) startHour = '0' + startHour;
+				if(startMinute < 10) startMinute = '0' + startMinute;
+				
+				//let ehour = Math.floor((initTime + apptInterval) / 60); 
+				//let eminute = (initTime + apptInterval) % 60;
+				
+				html += `<button type="button" class="btn btn-info" name="appt-time" value=${initTime} onclick="appt.getApptTime(this.value)">${startHour}:${startMinute}</button>`;
+				cnt++;
+				if(cnt % 6 === 0)
+					html += '<br><br>';
+			}
+		
+			year = dateArr[0];
 
-			y = dateArr[0];
+			if (dateArr[1][0] === '0') month = dateArr[1][1];
+			else month = dateArr[1];
 
-			if (dateArr[1][0] === '0') m = dateArr[1][1];
-			else m = dateArr[1];
+			if (dateArr[2][0] === '0') day = dateArr[2][1];
+			else day = dateArr[2];
 
-			if (dateArr[2][0] === '0') d = dateArr[2][1];
-			else d = dateArr[2];
-
-			$('#appt-popover-title').html('<strong>' + y + '년 ' + m + '월 ' + d + '일 ' + '</strong><br>');
-			const html = '<button type="button" class="btn btn-info" name="appt-time" value="1000" onclick="appt.getApptTime(this.value)">8:00 am – 9:00 am</button><br>\
-	        <button type="button" class="btn btn-info" name="appt-time" value="2000" onclick="appt.getApptTime(this.value)">10:00 am – 12:00 pm</button><br>\
-	        <button type="button" class="btn btn-info" name="appt-time" value="3000" onclick="appt.getApptTime(this.value)">12:00 pm – 2:00 pm</button>';
-			$('#appt-popover-content').html('예약 가능한 시간' + html);
+			$('#appt-popover-title').html('<strong>' + year + '년 ' + month + '월 ' + day + '일 ' + '</strong><br>');
+			//const html = '<button type="button" class="btn btn-info" name="appt-time" value="1000" onclick="appt.getApptTime(this.value)">8:00 am – 9:00 am</button><br>\
+	        //<button type="button" class="btn btn-info" name="appt-time" value="2000" onclick="appt.getApptTime(this.value)">10:00 am – 12:00 pm</button><br>\
+	        //<button type="button" class="btn btn-info" name="appt-time" value="3000" onclick="appt.getApptTime(this.value)">12:00 pm – 2:00 pm</button>';
+	        
+	        const apptTable = html;
+			$('#appt-popover-content').html('예약 가능한 시간<br>' + apptTable);
 			$('#appt-date').popover('show');
 		}
 	});
@@ -107,9 +142,6 @@ const index = {
 		let clientName = document.querySelector('#client-name').value;
 		let clientPhone = document.querySelector('#client-phone').value;
 
-		console.log("날짜: " + apptDate);
-		console.log("시간: " + apptTime);
-
 		if (!validateClient(clientName, clientPhone)) return;
 
 		let data = {
@@ -118,6 +150,8 @@ const index = {
 			clientName: clientName,
 			clientPhone: clientPhone,
 		};
+		
+		console.log('데이터: ' + JSON.stringify(data));
 
 		$.ajax({
 			type: 'POST',

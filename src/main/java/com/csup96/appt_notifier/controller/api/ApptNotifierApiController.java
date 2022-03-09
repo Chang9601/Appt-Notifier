@@ -24,20 +24,20 @@ public class ApptNotifierApiController {
 	public ResponseDTO<Integer> save(@RequestBody Appointment appointment) {
 		apptService.save(appointment);
 		
-		return new ResponseDTO<Integer>(HttpStatus.OK, 0);
+		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}
 	
 	@GetMapping("/find")
 	public ResponseDTO<Appointment> find(String clientName, String clientPhone) {
 		Appointment ret = apptService.find(clientName, clientPhone);
 		
-		return new ResponseDTO<Appointment>(HttpStatus.OK, ret);
+		return new ResponseDTO<Appointment>(HttpStatus.OK.value(), ret);
 	}	
 	
 	@DeleteMapping("/delete")
 	public ResponseDTO<Integer> delete(String clientName, String clientPhone) {
 		apptService.delete(clientName, clientPhone);
 		
-		return new ResponseDTO<Integer>(HttpStatus.OK, 0);
+		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}		
 }
