@@ -1,14 +1,16 @@
+// 예약 시간 전달
 const appt = {
-	apptTime: 0,
-	getApptTime: function(apptTime) {
+	apptTime: '0',
+	setApptTime: function(apptTime) {
 		this.apptTime = apptTime;
 	},
-	passApptTime: function() {
+	getApptTime: function() {
 		return this.apptTime;
 	}
 };
 
-const validateClient = (clientName, clientPhone) => {
+// 사용자 유효성
+const validateAppt = (clientName, clientPhone) => {
 
 	if (clientName === '') {
 		alert('이름을 입력하세요.');
@@ -33,14 +35,51 @@ const validateClient = (clientName, clientPhone) => {
 	return true;
 };
 
-const parseTime = (apptTime) => {
+// 문자열 숫자 -> 정수 숫자
+const decodeTime = (apptTime) => {
 	apptTime = apptTime.split(':');
-	
-	// 문자열 -> 숫자 변환
+
 	let hour = parseInt(apptTime[0], 10);
 	let minute = parseInt(apptTime[1], 10);
-		
+
 	return hour * 60 + minute;
+};
+
+// 정수 숫자 -> 문자열 숫자
+const encodeTime = (apptTime) => {
+	let hour = Math.floor(apptTime / 60); // 시
+	let minute = apptTime % 60; // 분
+
+	if (hour < 10) hour = '0' + hour; // 앞에 0 추가
+	if (minute < 10) minute = '0' + minute; // 앞에 0 추기
+	apptTime = hour + ':' + minute; // 시:분 형식의 문자열
+
+	return apptTime;
+};
+
+// 시 포맷
+const formatHour = (apptTime) => {
+	let hour = Math.floor(apptTime / 60); // 시	
+	if (hour < 10) hour = '0' + hour; // 앞에 0 추가
+
+	return hour;
+};
+
+// 분 포맷
+const formatMinute = (apptTime) => {
+	let minute = apptTime % 60; // 분	
+	if (minute < 10) minute = '0' + minute; // 앞에 0 추가
+
+	return minute;
+};
+
+// 이미 예약
+const isAlreadyAppt = (appts, date, time) => {
+	for (let i = 0; i < appts.length; i++) {
+		if (appts[i].apptDate === date && appts[i].apptTime === time)
+			return true;
+	}
+	return false;
 };
 
 $(function() {
@@ -76,30 +115,29 @@ $(function() {
 		onSelect: function(date) {
 			let dateArr = date.split('-');
 			let year, month, day;
-			
-			let openTime = parseTime(document.querySelector('#open-time').value); 
-			let closeTime =  parseTime(document.querySelector('#close-time').value); 
+
+			let openTime = decodeTime(document.querySelector('#open-time').value);
+			let closeTime = decodeTime(document.querySelector('#close-time').value);
 			let apptInterval = parseInt(document.querySelector('#appt-interval').value); // 문자열 -> 숫자 변환
-			
+			let appts = JSON.parse(document.querySelector("#appts").value); // 예약명단
+
 			let html = '';
 			let cnt = 0;
 			
-			for(initTime = openTime; initTime < closeTime; initTime += apptInterval) {
-				let startHour = Math.floor(initTime / 60); 
-				let startMinute = initTime % 60;
-				
-				if(startHour < 10) startHour = '0' + startHour;
-				if(startMinute < 10) startMinute = '0' + startMinute;
-				
-				//let ehour = Math.floor((initTime + apptInterval) / 60); 
-				//let eminute = (initTime + apptInterval) % 60;
-				
-				html += `<button type="button" class="btn btn-info" name="appt-time" value=${initTime} onclick="appt.getApptTime(this.value)">${startHour}:${startMinute}</button>`;
+			console.log('지금: ' + new Date().toISOString());
+
+			for (initTime = openTime; initTime < closeTime; initTime += apptInterval) {
+				time = encodeTime(initTime);
+				let disable = '';
+				if (isAlreadyAppt(appts, date, time))
+					disable = 'disabled';
+				html += `<button type="button" ${disable} class="btn btn-info" name="appt-time" value=${time} onclick="appt.setApptTime(this.value)">${formatHour(initTime)}:${formatMinute(initTime)}</button>`;
+
 				cnt++;
-				if(cnt % 6 === 0)
+				if (cnt % 6 === 0) // TO-DO: 한 줄당 예약 시간의 개수
 					html += '<br><br>';
 			}
-		
+
 			year = dateArr[0];
 
 			if (dateArr[1][0] === '0') month = dateArr[1][1];
@@ -109,11 +147,7 @@ $(function() {
 			else day = dateArr[2];
 
 			$('#appt-popover-title').html('<strong>' + year + '년 ' + month + '월 ' + day + '일 ' + '</strong><br>');
-			//const html = '<button type="button" class="btn btn-info" name="appt-time" value="1000" onclick="appt.getApptTime(this.value)">8:00 am – 9:00 am</button><br>\
-	        //<button type="button" class="btn btn-info" name="appt-time" value="2000" onclick="appt.getApptTime(this.value)">10:00 am – 12:00 pm</button><br>\
-	        //<button type="button" class="btn btn-info" name="appt-time" value="3000" onclick="appt.getApptTime(this.value)">12:00 pm – 2:00 pm</button>';
-	        
-	        const apptTable = html;
+			const apptTable = html;
 			$('#appt-popover-content').html('예약 가능한 시간<br>' + apptTable);
 			$('#appt-date').popover('show');
 		}
@@ -138,11 +172,11 @@ const index = {
 
 	save: function() {
 		let apptDate = document.querySelector('#appt-date').value;
-		let apptTime = appt.passApptTime();
+		let apptTime = appt.getApptTime();
 		let clientName = document.querySelector('#client-name').value;
 		let clientPhone = document.querySelector('#client-phone').value;
 
-		if (!validateClient(clientName, clientPhone)) return;
+		if (!validateAppt(clientName, clientPhone)) return;
 
 		let data = {
 			apptDate: apptDate,
@@ -150,7 +184,7 @@ const index = {
 			clientName: clientName,
 			clientPhone: clientPhone,
 		};
-		
+
 		console.log('데이터: ' + JSON.stringify(data));
 
 		$.ajax({

@@ -1,5 +1,7 @@
 package com.csup96.appt_notifier.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +23,23 @@ public class ApptService {
 		apptRepository.save(appointment);
 	}
 	
-	// 예약명단
-	public Page<Appointment> list(Pageable pageable) { // Page count 쿼리 사용
+	// 예약명단 - 페이지 적용
+	public Page<Appointment> listPage(Pageable pageable) { // Page count 쿼리 사용
 		return apptRepository.findAll(pageable);
+	}
+	
+	public List<Appointment> list() {
+		return apptRepository.findAll();
+	}
+	
+	// 예약명단 - 날짜
+	public List<String> listDate() {
+		return apptRepository.findAllByDate();
+	}
+	
+	// 예약명단 - 시간
+	public List<String> listTime() {
+		return apptRepository.findAllByTime();
 	}
 	
 	// 예약찾기
