@@ -124,12 +124,19 @@ $(function() {
 			let html = '';
 			let cnt = 0;
 			
-			console.log('지금: ' + new Date().toISOString());
-
+			// 오늘
+			const today = new Date().toISOString().split('T')[0];
+			
+			// 현재 시간
+			let now = new Date().toLocaleTimeString('it-IT');
+			now = now.split(':');
+			now = now[0] + ':' + now[1];
+			now = decodeTime(now);
+			
 			for (initTime = openTime; initTime < closeTime; initTime += apptInterval) {
 				time = encodeTime(initTime);
 				let disable = '';
-				if (isAlreadyAppt(appts, date, time))
+				if (isAlreadyAppt(appts, date, time) || ((today === date) && initTime < now)) // 이미 예약 or 오늘 현재 시간 전
 					disable = 'disabled';
 				html += `<button type="button" ${disable} class="btn btn-info" name="appt-time" value=${time} onclick="appt.setApptTime(this.value)">${formatHour(initTime)}:${formatMinute(initTime)}</button>`;
 
@@ -184,22 +191,34 @@ const index = {
 			clientName: clientName,
 			clientPhone: clientPhone,
 		};
-
-		console.log('데이터: ' + JSON.stringify(data));
-
+	
 		$.ajax({
-			type: 'POST',
-			url: '/api/appt/save',
-			data: JSON.stringify(data),
-			contentType: 'application/json; charset=UTF-8', // 서버에 요청하는 자료형
-			dataType: 'json' // 서버가 응답하는 자료형
-		}).done(function(resp) {
-			console.log(resp);
-		}).fail(function(error) {
+			type: 'GET',
+			url: '/api/appt/find-date',
+			data: { apptDate: apptDate, apptTime: apptTime },
+			contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // 서버에 요청하는 자료형
+			dataType: 'json' // 서버가 응답하는 자료형			
+		}).done(function(resp){
+			if(resp.data !== null) {
+				alert('이미 예약 되었습니다.');
+				return;
+			}
+			
+			$.ajax({
+				type: 'POST',
+				url: '/api/appt/save',
+				data: JSON.stringify(data),
+				contentType: 'application/json; charset=UTF-8', // 서버에 요청하는 자료형
+				dataType: 'json' // 서버가 응답하는 자료형						
+			}).done(function(resp){
+				console.log(resp);
+				alert('예약이 완료되었습니다.');
+			}).fail(function(error){
+				alert(JSON.stringify(error));				
+			});
+		}).fail(function(error){
 			alert(JSON.stringify(error));
 		});
-
-		alert('예약이 완료되었습니다.');
 	},
 
 	delete: function() {
@@ -212,10 +231,10 @@ const index = {
 
 		$.ajax({
 			type: 'GET',
-			url: '/api/appt/find',
+			url: '/api/appt/find-name',
 			data: { clientName: clientName, clientPhone: clientPhone },
 			contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // 서버에 요청하는 자료형
-			dataType: "json" // 서버가 응답하는 자료형
+			dataType: 'json' // 서버가 응답하는 자료형
 		}).done(function(resp) {
 			if (resp.data === null) {
 				alert('정보와 일치하는 예약이 없습니다.');
@@ -230,7 +249,7 @@ const index = {
 			}).done(function() {
 				alert('예약이 취소되었습니다.');
 			}).fail(function(error) {
-				alert(error);
+				alert(JSON.stringify(error));
 			});
 		}).fail(function(error) {
 			alert(JSON.stringify(error));

@@ -14,14 +14,17 @@ public class OpsTimeService {
 	@Autowired
 	private OpsTimeRepository opsTimeRepository;
 	
+	// 영업시간 저장
 	public void save(OpsTime opsTime) {
 		opsTimeRepository.save(opsTime);
 	}
 	
+	// 영업시간 찾기
 	public OpsTime findById(int id) {
 		return opsTimeRepository.findById(id).orElse(null);
 	}
 	
+	// 영업시간 갱신
 	public void update(OpsTime opsTime) {
 		OpsTime persistence = opsTimeRepository.findById(opsTime.getId()).orElse(null);
 		persistence.setOpenTime(opsTime.getOpenTime());

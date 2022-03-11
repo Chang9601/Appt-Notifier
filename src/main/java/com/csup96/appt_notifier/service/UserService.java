@@ -15,15 +15,18 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
+	// 관리자 저장
 	public void save(User user) {
 		user.setRole(RoleType.ADMIN);
 		userRepository.save(user);
 	}
 	
+	// 관리자 찾기
 	public User findById(int id) {
 		return userRepository.findById(id).orElse(null); // 없을 경우 null 반환
 	}
 	
+	// 관리자 갱신
 	public void update(User user) {
 		User persistence = userRepository.findById(user.getId()).orElse(null); // 없을 경우 null 반환
 		persistence.setPassword(user.getPassword());

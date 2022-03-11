@@ -25,18 +25,22 @@ public class ApptNotifierController {
 	private final int id = 1;
 	
 	@GetMapping("/index")
-	public String index(Model model) {
+	public String index(Model model) {		
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create(); // 날짜 형식 설정
+		String json = gson.toJson(apptService.list()); // 예약시간, Java 객체 <-> JSON <-> JavaScript 객체
+		
 		model.addAttribute("ops-time", opsTimeService.findById(id)); // 영업 시간
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		String json = gson.toJson(apptService.list()); // 예약시간
 		model.addAttribute("appts", json); // 예약 시간
 		
 		return "index"; // templates/index.mustache 이동
 	}
 	
 	@GetMapping("/appt")
-	public String appts(Model model, @PageableDefault(size = 5, sort="id", direction = Sort.Direction.DESC)Pageable pageable) {
+	public String appts(Model model, @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
 		model.addAttribute("appts", apptService.listPage(pageable));
+		model.addAttribute("prev", pageable.previousOrFirst().getPageNumber());
+	    model.addAttribute("next", pageable.next().getPageNumber());
+	    
 		return "appt";
 	}
 	

@@ -1,5 +1,6 @@
 package com.csup96.appt_notifier.service;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class ApptService {
 	
 	// 예약하기
 	public void save(Appointment appointment) {
+		Date sqlDate = new Date(appointment.getApptDate().getTime());
+		
+		duplicate(sqlDate, appointment.getApptTime());
 		apptRepository.save(appointment);
 	}
 	
@@ -28,27 +32,33 @@ public class ApptService {
 		return apptRepository.findAll(pageable);
 	}
 	
+	// 예약명단 - 페이지 적용 X
 	public List<Appointment> list() {
 		return apptRepository.findAll();
 	}
 	
-	// 예약명단 - 날짜
-	public List<String> listDate() {
-		return apptRepository.findAllByDate();
-	}
-	
-	// 예약명단 - 시간
-	public List<String> listTime() {
-		return apptRepository.findAllByTime();
-	}
-	
-	// 예약찾기
-	public Appointment find(String clientName, String clientPhone) {
+	// 예약찾기 - 이름과 전화번호
+	public Appointment findByNameAndPhone(String clientName, String clientPhone) {
 		return apptRepository.findByNameAndPhone(clientName, clientPhone);
+	}
+	
+	// 예약찾기 - 날짜와 시간
+	public Appointment findByDateAndTime(String apptDate, String apptTime) {
+		Date sqlDate = Date.valueOf(apptDate);
+		List<Appointment> list = apptRepository.findAllByDateAndTime(sqlDate, apptTime);
+		
+		return !list.isEmpty() ? list.get(0) : null; // 빈 리스트 처리
 	}
 	
 	// 예약취소
 	public void delete(String clientName, String clientPhone) {
 		apptRepository.deleteByNameAndPhone(clientName, clientPhone);
+	}
+	
+	// 중복 확인, 내부 함수라서 private 지시어
+	private void duplicate(Date apptDate, String apptTime) {
+		List<Appointment> list = apptRepository.findAllByDateAndTime(apptDate, apptTime);
+		if(!list.isEmpty())
+			throw new IllegalArgumentException("이미 예약이 되었습니다.");
 	}
 }

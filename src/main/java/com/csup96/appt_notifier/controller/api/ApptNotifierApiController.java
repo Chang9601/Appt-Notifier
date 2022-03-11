@@ -27,9 +27,16 @@ public class ApptNotifierApiController {
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}
 	
-	@GetMapping("/find")
-	public ResponseDTO<Appointment> find(String clientName, String clientPhone) {
-		Appointment ret = apptService.find(clientName, clientPhone);
+	@GetMapping("/find-name")
+	public ResponseDTO<Appointment> findByNameAndPhone(String clientName, String clientPhone) {
+		Appointment ret = apptService.findByNameAndPhone(clientName, clientPhone);
+		
+		return new ResponseDTO<Appointment>(HttpStatus.OK.value(), ret);
+	}	
+	
+	@GetMapping("/find-date")
+	public ResponseDTO<Appointment> findByDateAndTime(String apptDate, String apptTime) {
+		Appointment ret = apptService.findByDateAndTime(apptDate, apptTime);
 		
 		return new ResponseDTO<Appointment>(HttpStatus.OK.value(), ret);
 	}	
