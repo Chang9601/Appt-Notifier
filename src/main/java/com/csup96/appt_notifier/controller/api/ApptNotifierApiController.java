@@ -1,6 +1,7 @@
 package com.csup96.appt_notifier.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,23 +28,24 @@ public class ApptNotifierApiController {
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}
 	
-	@GetMapping("/find-name")
-	public ResponseDTO<Appointment> findByNameAndPhone(String clientName, String clientPhone) {
-		Appointment ret = apptService.findByNameAndPhone(clientName, clientPhone);
+	@GetMapping("/find-all-by-name")
+	public ResponseDTO<Page<Appointment>> findAllByNameAndPhone(String clientName, String clientPhone) {
+		Page<Appointment> ret = apptService.findAllByNameAndPhone(clientName, clientPhone, null); // Pageable 없으니까 null
+		ret = ret.isEmpty() ? null : ret;
 		
-		return new ResponseDTO<Appointment>(HttpStatus.OK.value(), ret);
+		return new ResponseDTO<Page<Appointment>>(HttpStatus.OK.value(), ret);
 	}	
 	
-	@GetMapping("/find-date")
+	@GetMapping("/find-by-date")
 	public ResponseDTO<Appointment> findByDateAndTime(String apptDate, String apptTime) {
-		Appointment ret = apptService.findByDateAndTime(apptDate, apptTime);
+		Appointment ret = apptService.findAllByDateAndTime(apptDate, apptTime);
 		
 		return new ResponseDTO<Appointment>(HttpStatus.OK.value(), ret);
 	}	
 	
 	@DeleteMapping("/delete")
-	public ResponseDTO<Integer> delete(String clientName, String clientPhone) {
-		apptService.delete(clientName, clientPhone);
+	public ResponseDTO<Integer> delete(@RequestBody Appointment appointment) {
+		apptService.delete(appointment.getClientName(), appointment.getClientPhone());
 		
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}		

@@ -17,7 +17,7 @@ public class UserService {
 	
 	// 관리자 저장
 	public void save(User user) {
-		user.setRole(RoleType.ADMIN);
+		user.setRole(RoleType.ADMIN); // 역할 설정
 		userRepository.save(user);
 	}
 	

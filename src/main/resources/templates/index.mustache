@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>예약</title>
+  <title>예약표</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -35,10 +35,10 @@
   <form>
   	<div class="form-group">
  	  <label for="appt-time" class="form-label">날짜와 시간</label>      
-	  <input type="hidden" class="form-control" id="open-time" name="open-time" value="{{ops-time.openTime}}">
-	  <input type="hidden" class="form-control" id="close-time" name="close-time" value="{{ops-time.closeTime}}">
-	  <input type="hidden" class="form-control" id="appt-interval" name="appt-interval" value="{{ops-time.apptInterval}}">
-	  <input type="hidden" class="form-control" id="appts" name="appts" value="{{appts}}">
+	  <input type="hidden" class="form-control" id="open-time" value="{{ops-time.openTime}}">
+	  <input type="hidden" class="form-control" id="close-time" value="{{ops-time.closeTime}}">
+	  <input type="hidden" class="form-control" id="appt-interval" value="{{ops-time.apptInterval}}">
+	  <input type="hidden" class="form-control" id="appts" value="{{appts}}">
 
 	    	
 	  <div class="date-picker-2" id="appt-date" aria-describedby="basic-addon2"></div> <!-- inline display -->

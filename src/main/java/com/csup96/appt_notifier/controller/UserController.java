@@ -12,6 +12,10 @@ public class UserController {
 	 * 아이디: admin 고정, 비밀번호: 수정 가능
 	 * 
 	 * */
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
 	
 	@GetMapping("/admin")
 	public String admin() {

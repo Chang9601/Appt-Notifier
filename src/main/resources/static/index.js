@@ -194,7 +194,7 @@ const index = {
 	
 		$.ajax({
 			type: 'GET',
-			url: '/api/appt/find-date',
+			url: '/api/appt/find-by-date',
 			data: { apptDate: apptDate, apptTime: apptTime },
 			contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // 서버에 요청하는 자료형
 			dataType: 'json' // 서버가 응답하는 자료형			
@@ -211,7 +211,6 @@ const index = {
 				contentType: 'application/json; charset=UTF-8', // 서버에 요청하는 자료형
 				dataType: 'json' // 서버가 응답하는 자료형						
 			}).done(function(resp){
-				console.log(resp);
 				alert('예약이 완료되었습니다.');
 			}).fail(function(error){
 				alert(JSON.stringify(error));				
@@ -224,33 +223,26 @@ const index = {
 	delete: function() {
 		let ok = confirm('예약을 취소하시겠습니까?');
 
-		if (!ok) return;
+		if (!ok) {
+			return;	
+		}
 
 		let clientName = prompt('이름');
 		let clientPhone = prompt('전화번호');
 
 		$.ajax({
 			type: 'GET',
-			url: '/api/appt/find-name',
+			url: '/api/appt/find-all-by-name',
 			data: { clientName: clientName, clientPhone: clientPhone },
 			contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // 서버에 요청하는 자료형
 			dataType: 'json' // 서버가 응답하는 자료형
 		}).done(function(resp) {
 			if (resp.data === null) {
-				alert('정보와 일치하는 예약이 없습니다.');
+				alert('입력하신 정보와 일치하는 예약이 없습니다.');
 				return;
 			}
+			location.replace(`/client/delete?clientName=${clientName}&clientPhone=${clientPhone}`);
 
-			$.ajax({
-				type: 'DELETE',
-				url: '/api/appt/delete',
-				data: { clientName: clientName, clientPhone: clientPhone },
-				contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // 서버에 요청하는 자료형				
-			}).done(function() {
-				alert('예약이 취소되었습니다.');
-			}).fail(function(error) {
-				alert(JSON.stringify(error));
-			});
 		}).fail(function(error) {
 			alert(JSON.stringify(error));
 		});

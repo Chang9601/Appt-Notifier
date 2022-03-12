@@ -51,7 +51,7 @@ const validateOpsTime = (openTime, closeTime, apptInterval) => {
 	}
 
 	return true;
-}
+};
 
 const admin = {
 	init: function() {
@@ -83,7 +83,6 @@ const admin = {
 			url: '/api/user/find',
 			dataType: 'json' // 서버가 응답하는 자료형
 		}).done(function(resp) {
-			console.log(resp);
 
 			let url, type;
 			if (resp.data === null) {
@@ -102,7 +101,7 @@ const admin = {
 				contentType: 'application/json; charset=UTF-8', // 서버에 요청하는 자료형
 				dataType: 'json' // 서버가 응답하는 자료형				
 			}).done(function(resp) {
-				console.log(resp);
+				alert('비밀번호 설정이 완료됐습니다.');
 			}).fail(function() {
 				alert(JSON.stringify(error));
 			});
@@ -110,8 +109,6 @@ const admin = {
 		}).fail(function(error) {
 			alert(JSON.stringify(error));
 		});
-
-		alert('비밀번호 설정이 완료됐습니다.');
 	},
 
 	saveTime: function() {
@@ -134,7 +131,6 @@ const admin = {
 			url: '/api/ops-time/find',
 			dataType: 'json' // 서버가 응답하는 자료형
 		}).done(function(resp) {
-			console.log(resp);
 			
 			let url, type;
 			if (resp.data === null) {
@@ -153,7 +149,6 @@ const admin = {
 				contentType: 'application/json; charset=UTF-8', // 서버에 요청하는 자료형		
 				dataType: 'json'		
 			}).done(function(resp) {
-				console.log(resp);
 			}).fail(function(error) {
 				alert(JSON.stringify(error));
 			});
@@ -162,7 +157,7 @@ const admin = {
 		});
 		
 		alert('시간 설정이 완료되었습니다.');
-	}
+	},
 }
 
 admin.init();
