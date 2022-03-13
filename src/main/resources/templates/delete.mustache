@@ -8,10 +8,15 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+<!-- a, u: 밑줄 제거 -->
 <style>
 	th, td {
 		text-align: center;	
 	}
+	
+	a, u {
+  		text-decoration: none;
+	}	
 </style>
 
 </head>
@@ -31,11 +36,11 @@
 			<tbody>
 				{{#appts}}
 				<tr>
-					<td id="appt-date">{{apptDate}}</td>
+					<td>{{apptDate}}</td>
 					<td>{{apptTime}}</td>
 					<td>{{clientName}}</td>
 					<td>{{clientPhone}}</td>
-					<td><button>🪓</button></td>
+					<td><a href="javascript:void(0)" class="no-link" onclick="query.setParam({{id}})">🪓</a></td>
 				</tr>
 				{{/appts}}
 			</tbody>
@@ -60,45 +65,40 @@
 </body>
 
 <script>
-	document.querySelector('button').addEventListener('click', () => {
-		let val = confirm('해당 예약을 취소하시겠습니까?');
-		
-		let apptDate = ((document.getElementById('appt-date')).innerHTML).trim();
-		
-		console.log(apptDate);
-	
-		/*
-		let clientName = document.querySelector('#name').value;
-		let clientPhone = document.querySelector('#phone').value;
-		//let apptDate = document.querySelector('#').value;
-		//let apptTime = document.querySelector('#phone').value;
-				
-		let data = {
-			clientName: clientName,
-			clientPhone: clientPhone,
-		};
-		
-		if(val === false) {
-			return;
+	const query = {
+		param: '0',
+		setParam: function(param) {
+			this.param = param;
+		},
+		getParam: function() {
+			return this.param;
 		}
-		
-		$.ajax({
-			type: 'DELETE',
-			url: '/api/appt/delete',
-			data: JSON.stringify(data),
-			contentType: 'application/json; charset=UTF-8', // 서버에 요청하는 자료형
-			dataType: 'json' // 서버가 응답하는 자료형
-		}).done(function(resp) {
-			if (resp.data === null) {
-				alert('입력하신 정보와 일치하는 예약이 없습니다.');
-				return;
-			}
-			console.log(resp);
-			
-		}).fail(function(error) {
-			alert(JSON.stringify(error));
-		});		
+	};
+	
+	$(function() {
+		/* 왜 이거는 작동 안하지???
+		document.querySelector('.btn-delete').addEventListener('click', () => {
+			let val = confirm('해당 예약을 취소하시겠습니까?');
+		});
 		*/
+		$('a').click(function(e) {
+			let val = confirm('해당 예약을 취소하시겠습니까?');		
+			const id = query.getParam();
+	
+			//e.preventDefault();
+			//console.log(id);			
+			
+			$.ajax({
+				type: 'DELETE',
+				url: `/api/appt/delete/${id}`,
+				dataType: 'json' // 서버가 응답하는 자료형
+			}).done(function(resp) {				
+				location.reload(); // 새로고침
+			}).fail(function(error) {
+				alert(JSON.stringify(error));
+			});
+			
+		});
 	});
 </script>
 </html>

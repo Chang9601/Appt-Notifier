@@ -68,8 +68,7 @@ public class ApptNotifierController {
 	Pageable pageable) {
 
 		Page<Appointment> list = apptService.findAllByNameAndPhone(clientName, clientPhone, pageable);
-		//model.addAttribute("name", list.getContent().get(0).getClientName());
-		//model.addAttribute("phone", list.getContent().get(0).getClientPhone());
+		
 		model.addAttribute("appts", list);
 		model.addAttribute("prev", pageable.previousOrFirst().getPageNumber());
 		model.addAttribute("next", pageable.next().getPageNumber());

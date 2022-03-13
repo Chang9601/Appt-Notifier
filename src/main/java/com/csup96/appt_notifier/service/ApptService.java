@@ -51,8 +51,8 @@ public class ApptService {
 	}
 	
 	// 예약취소
-	public void delete(String clientName, String clientPhone) {
-		apptRepository.deleteByNameAndPhone(clientName, clientPhone);
+	public void delete(int id) {
+		apptRepository.deleteById(id);
 	}
 	
 	// 중복 확인, 내부 함수라서 private 지시어
