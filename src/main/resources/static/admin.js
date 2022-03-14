@@ -53,7 +53,7 @@ const validateOpsTime = (openTime, closeTime, apptInterval) => {
 	return true;
 };
 
-const admin = {
+let admin = {
 	init: function() {
 		document.querySelector('#btn-save-user').addEventListener('click', () => {
 			this.saveUser();

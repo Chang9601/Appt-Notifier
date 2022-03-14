@@ -25,8 +25,10 @@ public class ApptNotifierController {
 	@Autowired
 	private OpsTimeService opsTimeService;
 	
+	// 영업시간은 1개, 따라서 고정
 	private final int id = 1;
 	
+	// 예약표
 	@GetMapping("/index")
 	public String index(Model model) {		
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create(); // 날짜 형식 설정
@@ -38,7 +40,7 @@ public class ApptNotifierController {
 		return "index"; // templates/index.mustache 이동
 	}
 	
-	// 전체 예약명단
+	// 예약명단
 	@GetMapping("/appt")
 	public String appts(Model model, @PageableDefault(size = 5) 
 		@SortDefault.SortDefaults({
@@ -58,15 +60,15 @@ public class ApptNotifierController {
 		return "appt";
 	}
 	
-	// 고객 예약명단
-	@GetMapping("/client/delete")
-	public String delete(String clientName, String clientPhone, Model model, @PageableDefault(size = 5) 
+	// 예약변경 및 예약취소 명단
+	@GetMapping("/client/update-delete")
+	public String updateOrDelete(String clientName, String clientPhone, Model model, @PageableDefault(size = 5) 
 	@SortDefault.SortDefaults({
 		@SortDefault(sort = "appt_date", direction = Sort.Direction.ASC), // native Query 사용 시 DB 컬럼명
 		@SortDefault(sort = "appt_time", direction = Sort.Direction.ASC)  // native Query 사용 시 DB 컬럼명
 	}) 
 	Pageable pageable) {
-
+		
 		Page<Appointment> list = apptService.findAllByNameAndPhone(clientName, clientPhone, pageable);
 		
 		model.addAttribute("appts", list);
@@ -74,7 +76,22 @@ public class ApptNotifierController {
 		model.addAttribute("next", pageable.next().getPageNumber());
 		model.addAttribute("is-prev", list.hasPrevious());
 		model.addAttribute("is-next", list.hasNext());
+		
+		return "update_delete";
+	}
 	
-		return "delete";
+	// 예약변경 예약표
+	@GetMapping("/update-index")
+	public String updateIndex(Model model, int apptId, String clientName, String clientPhone) {
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create(); // 날짜 형식 설정
+		String json = gson.toJson(apptService.findAll()); // 예약시간, Java 객체 <-> JSON <-> JavaScript 객체
+		
+		model.addAttribute("ops-time", opsTimeService.findById(id)); // 영업 시간
+		model.addAttribute("appts", json); // 예약 시간
+		model.addAttribute("appt-id", apptId); // 변경할 예약 아이디
+		model.addAttribute("client-name", clientName); // 변경할 예약 이름
+		model.addAttribute("client-phone", clientPhone); // 변경할 예약 번호
+		
+		return "update";
 	}
 }

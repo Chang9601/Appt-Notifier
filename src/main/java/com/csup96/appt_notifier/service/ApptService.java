@@ -55,6 +55,14 @@ public class ApptService {
 		apptRepository.deleteById(id);
 	}
 	
+	// 예약변경
+	public void update(int id, Appointment appointment) {
+		Appointment persistence = apptRepository.findById(id).orElse(null);
+		
+		persistence.setApptDate(appointment.getApptDate());
+		persistence.setApptTime(appointment.getApptTime());
+	}
+	
 	// 중복 확인, 내부 함수라서 private 지시어
 	private void validateDuplicate(Date apptDate, String apptTime) {
 		List<Appointment> list = apptRepository.findAllByDateAndTime(apptDate, apptTime);

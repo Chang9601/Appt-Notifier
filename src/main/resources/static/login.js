@@ -8,7 +8,6 @@ const validateLogin = (password) => {
 	return true;
 };
 
-
 document.querySelector('#btn-login').addEventListener('click', () => {
 	let password = document.querySelector('#password').value;
 
@@ -38,6 +37,4 @@ document.querySelector('#btn-login').addEventListener('click', () => {
 	}).fail(function(error) {
 		alert(JSON.stringify(error));
 	});
-
-
 });

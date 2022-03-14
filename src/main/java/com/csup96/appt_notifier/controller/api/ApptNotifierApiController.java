@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,6 +48,13 @@ public class ApptNotifierApiController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseDTO<Integer> delete(@PathVariable int id) {
 		apptService.delete(id);
+		
+		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
+	}		
+	
+	@PutMapping("/update/{id}")
+	public ResponseDTO<Integer> update(@PathVariable int id, @RequestBody Appointment appointment) {
+		apptService.update(id, appointment);
 		
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}		

@@ -20,7 +20,7 @@ public class OpsTimeApiController {
 	@Autowired
 	private OpsTimeService opsTimeService;
 	
-	// 관리시간은 1개, 따라서 고정
+	// 영업시간은 1개, 따라서 고정
 	private final int id = 1;	
 	
 	@PostMapping("/save")
