@@ -10,7 +10,12 @@ let appt = {
 };
 
 // 사용자 유효성
-const validateAppt = (clientName, clientPhone) => {
+const validateAppt = (clientName, clientPhone, apptTime) => {
+
+	if(apptTime === '0') {
+		alert('예약 시간을 선택해주세요.');
+		return false;
+	}
 
 	if (clientName === '') {
 		alert('이름을 입력하세요.');
@@ -82,6 +87,22 @@ const isAlreadyAppt = (appts, date, time) => {
 	return false;
 };
 
+// 휴식 시간
+const isBetweenBreakTime = (startBreakTime, endBreakTime, startApptTime, endApptTime) => {	
+	if(startApptTime >= endBreakTime || endApptTime <= startBreakTime)
+		return false;
+	
+	return true;	
+};
+
+const computeNow = (now) => {
+	now = now.split(':');
+	now = now[0] + ':' + now[1];
+	now = decodeTime(now);	
+	
+	return now;
+};
+
 $(function() {
 	// 모든 date picker의 기본값 설정
 	$.datepicker.setDefaults({
@@ -118,9 +139,11 @@ $(function() {
 
 			let openTime = decodeTime(document.querySelector('#open-time').value);
 			let closeTime = decodeTime(document.querySelector('#close-time').value);
+			let startBreakTime = decodeTime(document.querySelector('#start-break-time').value);
+			let endBreakTime = decodeTime(document.querySelector('#end-break-time').value);
 			let apptInterval = parseInt(document.querySelector('#appt-interval').value); // 문자열 -> 숫자 변환
-			let appts = JSON.parse(document.querySelector("#appts").value); // 예약명단
-
+			let appts = JSON.parse(document.querySelector("#appts").value); // 예약명단, JSON 파싱
+			
 			let html = '';
 			let cnt = 0;
 			
@@ -129,14 +152,12 @@ $(function() {
 			
 			// 현재 시간
 			let now = new Date().toLocaleTimeString('it-IT');
-			now = now.split(':');
-			now = now[0] + ':' + now[1];
-			now = decodeTime(now);
+			now = computeNow(now);
 			
 			for (initTime = openTime; initTime < closeTime; initTime += apptInterval) {
 				time = encodeTime(initTime);
 				let disable = '';
-				if (isAlreadyAppt(appts, date, time) || ((today === date) && initTime < now)) // 이미 예약 or 오늘 현재 시간 전
+				if (isAlreadyAppt(appts, date, time) || ((today === date) && initTime < now) || isBetweenBreakTime(startBreakTime, endBreakTime, initTime, initTime + apptInterval)) // 이미 예약 or 오늘 현재 시간 전
 					disable = 'disabled';
 				html += `<button type="button" ${disable} class="btn btn-info" name="appt-time" value=${time} onclick="appt.setApptTime(this.value)">${formatHour(initTime)}:${formatMinute(initTime)}</button>`;
 
@@ -182,7 +203,7 @@ let index = {
 		let clientName = document.querySelector('#client-name').value;
 		let clientPhone = document.querySelector('#client-phone').value;
 
-		if (!validateAppt(clientName, clientPhone)) return;
+		if (!validateAppt(clientName, clientPhone, apptTime)) return;
 
 		let data = {
 			apptDate: apptDate,

@@ -56,6 +56,22 @@ const isAlreadyAppt = (appts, date, time) => {
 	return false;
 };
 
+// 휴식 시간
+const isBetweenBreakTime = (startBreakTime, endBreakTime, startApptTime, endApptTime) => {	
+	if(startApptTime >= endBreakTime || endApptTime <= startBreakTime)
+		return false;
+	
+	return true;	
+};
+
+const computeNow = (now) => {
+	now = now.split(':');
+	now = now[0] + ':' + now[1];
+	now = decodeTime(now);	
+	
+	return now;
+};
+
 $(function() {
 	// 모든 date picker의 기본값 설정
 	$.datepicker.setDefaults({
@@ -92,6 +108,8 @@ $(function() {
 
 			let openTime = decodeTime(document.querySelector('#open-time').value);
 			let closeTime = decodeTime(document.querySelector('#close-time').value);
+			let startBreakTime = decodeTime(document.querySelector('#start-break-time').value);
+			let endBreakTime = decodeTime(document.querySelector('#end-break-time').value);			
 			let apptInterval = parseInt(document.querySelector('#appt-interval').value); // 문자열 -> 숫자 변환
 			let appts = JSON.parse(document.querySelector("#appts").value); // 예약명단
 
@@ -103,14 +121,12 @@ $(function() {
 			
 			// 현재 시간
 			let now = new Date().toLocaleTimeString('it-IT');
-			now = now.split(':');
-			now = now[0] + ':' + now[1];
-			now = decodeTime(now);
+			now = computeNow(now);
 			
 			for (initTime = openTime; initTime < closeTime; initTime += apptInterval) {
 				time = encodeTime(initTime);
 				let disable = '';
-				if (isAlreadyAppt(appts, date, time) || ((today === date) && initTime < now)) // 이미 예약 or 오늘 현재 시간 전
+				if (isAlreadyAppt(appts, date, time) || ((today === date) && initTime < now) || isBetweenBreakTime(startBreakTime, endBreakTime, initTime, initTime + apptInterval)) // 이미 예약 or 오늘 현재 시간 전
 					disable = 'disabled';
 				html += `<button type="button" ${disable} class="btn btn-info" name="appt-time" value=${time} onclick="appt.setApptTime(this.value)">${formatHour(initTime)}:${formatMinute(initTime)}</button>`;
 
@@ -138,6 +154,44 @@ $(function() {
 document.querySelector('#btn-update').addEventListener('click', () => {
 	
 	let ok = confirm('예약을 변경하시겠습니까?');
+	
+	if(!ok) {
+		return;
+	}
+
+	let id = document.querySelector('#appt-id').value;
+	let apptDate = document.querySelector('#appt-date').value;
+	let apptTime = appt.getApptTime();
+	let clientName = document.querySelector('#client-name').value;
+	let clientPhone = document.querySelector('#client-phone').value;	
+	
+	if(apptTime === '0') {
+		alert('예약 시간을 선택해주세요.');
+		return false;
+	}
+	
+	let data = {
+		apptDate: apptDate,
+		apptTime: apptTime
+	};
+	
+	$.ajax({
+		type: 'PUT',
+		url: `/api/appt/update/${id}`,
+		data: JSON.stringify(data),
+		contentType: 'application/json; charset=UTF-8', // 서버에 요청하는 자료형		
+		dataType: 'json' // 서버가 응답하는 자료형
+	}).done(function(resp) {
+		alert('예약이 변경되었습니다.');
+		location.replace(`/client/update-delete?clientName=${clientName}&clientPhone=${clientPhone}`);
+	}).fail(function(error) {
+		alert(JSON.stringify(error));
+	});
+});
+
+document.querySelector('#btn-cancel').addEventListener('click', () => {
+	
+	let ok = confirm('예약목록으로 돌아가시겠습니까?');
 	
 	if(!ok) {
 		return;

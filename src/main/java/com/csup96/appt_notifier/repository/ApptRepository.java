@@ -20,7 +20,10 @@ public interface ApptRepository extends JpaRepository<Appointment, Integer> {
 		countQuery = "SELECT count(*) FROM appintment WHERE client_name = :client_name AND client_phone = :client_phone", // native query의 경우 count 직접 추가
 		nativeQuery = true
 	)
-	Page<Appointment> findAllByNameAndPhone(@Param("client_name") String clintName, @Param("client_phone") String clientPhone, Pageable pageable);
+	Page<Appointment> findByClientNameAndClientPhone(@Param("client_name") String clintName, @Param("client_phone") String clientPhone, Pageable pageable);
+	
+	// TO-DO: 오류 원인 파악
+	//Page<Appointment> findByClientNameAndClientPhone(String clientName, String clientPhone, Pageable pageable);
 	
 	/*
 	// 예약 취소
@@ -30,7 +33,6 @@ public interface ApptRepository extends JpaRepository<Appointment, Integer> {
 	void deleteByNameAndPhone(@Param("client_name") String clientName, @Param("client_phone") String clientPhone);
 	*/
 	
-	// 날짜와 시간으로 검색, 1개만 검색
-	@Query(value = "SELECT * FROM appointment WHERE appt_date = :appt_date AND appt_time = :appt_time", nativeQuery = true)
-	List<Appointment> findAllByDateAndTime(@Param("appt_date") Date apptDate, @Param("appt_time") String apptTime);
+	// 날짜와 시간으로 검색, derived의 경우 이름은 필드와 동일
+	List<Appointment> findByApptDateAndApptTime(Date apptDate, String apptTime);
 }

@@ -68,8 +68,7 @@ public class ApptNotifierController {
 		@SortDefault(sort = "appt_time", direction = Sort.Direction.ASC)  // native Query 사용 시 DB 컬럼명
 	}) 
 	Pageable pageable) {
-		
-		Page<Appointment> list = apptService.findAllByNameAndPhone(clientName, clientPhone, pageable);
+		Page<Appointment> list = apptService.findByNameAndPhone(clientName, clientPhone, pageable);
 		
 		model.addAttribute("appts", list);
 		model.addAttribute("prev", pageable.previousOrFirst().getPageNumber());

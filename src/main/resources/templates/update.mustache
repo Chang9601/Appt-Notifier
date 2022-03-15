@@ -31,7 +31,6 @@
 
 <div class="container mt-3">
   <h2>영업 시간: {{ops-time.openTime}} - {{ops-time.closeTime}}</h2>
-  <h2>예약 아이디: {{appt-id}}</h2>
   <br />
   <form>
   	<div class="form-group">
@@ -39,6 +38,8 @@
 	  <input type="hidden" class="form-control" id="open-time" value="{{ops-time.openTime}}">
 	  <input type="hidden" class="form-control" id="close-time" value="{{ops-time.closeTime}}">
 	  <input type="hidden" class="form-control" id="appt-interval" value="{{ops-time.apptInterval}}">
+	  <input type="hidden" class="form-control" id="start-break-time" value="{{ops-time.startBreakTime}}">
+	  <input type="hidden" class="form-control" id="end-break-time" value="{{ops-time.endBreakTime}}">	  
 	  <input type="hidden" class="form-control" id="appts" value="{{appts}}">
 	  <input type="hidden" class="form-control" id="appt-id" value="{{appt-id}}">
 	  <input type="hidden" class="form-control" id="client-name" value="{{client-name}}">
@@ -54,6 +55,7 @@
     
   	<div class="form-group">    
    	  <button type="button" id="btn-update" class="btn btn-warning">변경하기</button>    
+   	  <button type="button" id="btn-cancel" class="btn btn-primary">돌아가기</button>       	  
   	</div>
   </form>
 </div>

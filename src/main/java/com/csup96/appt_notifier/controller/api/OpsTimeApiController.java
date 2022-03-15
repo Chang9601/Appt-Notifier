@@ -25,18 +25,19 @@ public class OpsTimeApiController {
 	
 	@PostMapping("/save")
 	public ResponseDTO<Integer> save(@RequestBody OpsTime opsTime) {
+		System.out.println("시간: " + opsTime);
 		opsTimeService.save(opsTime);
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}
 	
 	@GetMapping("/find")
-	public ResponseDTO<OpsTime> find(OpsTime opsTime) {
+	public ResponseDTO<OpsTime> findById(OpsTime opsTime) {
 		OpsTime persistence = opsTimeService.findById(id);
 		return new ResponseDTO<OpsTime>(HttpStatus.OK.value(), persistence);
 	}
 	
 	@PutMapping("/update")
-	public ResponseDTO<Integer> update(@RequestBody OpsTime opsTime) {
+	public ResponseDTO<Integer> updateById(@RequestBody OpsTime opsTime) {
 		opsTime.setId(id);
 		opsTimeService.update(opsTime);
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);

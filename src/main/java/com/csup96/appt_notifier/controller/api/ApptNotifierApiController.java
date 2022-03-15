@@ -31,8 +31,8 @@ public class ApptNotifierApiController {
 	}
 	
 	@GetMapping("/find-all-by-name")
-	public ResponseDTO<Page<Appointment>> findAllByNameAndPhone(String clientName, String clientPhone) {
-		Page<Appointment> ret = apptService.findAllByNameAndPhone(clientName, clientPhone, null); // Pageable 없으니까 null
+	public ResponseDTO<Page<Appointment>> findByNameAndPhone(String clientName, String clientPhone) {
+		Page<Appointment> ret = apptService.findByNameAndPhone(clientName, clientPhone, null); // Pageable 없으니까 null
 		ret = ret.isEmpty() ? null : ret;
 		
 		return new ResponseDTO<Page<Appointment>>(HttpStatus.OK.value(), ret);
@@ -40,20 +40,20 @@ public class ApptNotifierApiController {
 	
 	@GetMapping("/find-by-date")
 	public ResponseDTO<Appointment> findByDateAndTime(String apptDate, String apptTime) {
-		Appointment ret = apptService.findAllByDateAndTime(apptDate, apptTime);
+		Appointment ret = apptService.findByDateAndTime(apptDate, apptTime);
 		
 		return new ResponseDTO<Appointment>(HttpStatus.OK.value(), ret);
 	}	
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseDTO<Integer> delete(@PathVariable int id) {
+	public ResponseDTO<Integer> deleteById(@PathVariable int id) {
 		apptService.delete(id);
 		
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}		
 	
 	@PutMapping("/update/{id}")
-	public ResponseDTO<Integer> update(@PathVariable int id, @RequestBody Appointment appointment) {
+	public ResponseDTO<Integer> updateById(@PathVariable int id, @RequestBody Appointment appointment) {
 		apptService.update(id, appointment);
 		
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);

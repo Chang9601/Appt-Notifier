@@ -29,6 +29,8 @@ public class OpsTimeService {
 		OpsTime persistence = opsTimeRepository.findById(opsTime.getId()).orElse(null);
 		persistence.setOpenTime(opsTime.getOpenTime());
 		persistence.setCloseTime(opsTime.getCloseTime());
+		persistence.setStartBreakTime(opsTime.getStartBreakTime());
+		persistence.setEndBreakTime(opsTime.getEndBreakTime());		
 		persistence.setApptInterval(opsTime.getApptInterval());
 	}
 }

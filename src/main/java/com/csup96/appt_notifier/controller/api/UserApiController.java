@@ -30,13 +30,13 @@ public class UserApiController {
 	}
 	
 	@GetMapping("/find")
-	public ResponseDTO<User> find() {
+	public ResponseDTO<User> findById() {
 		User persistence = userService.findById(id);
 		return new ResponseDTO<User>(HttpStatus.OK.value(), persistence);
 	}
 	
 	@PutMapping("/update")
-	public ResponseDTO<Integer> update(@RequestBody User user) {
+	public ResponseDTO<Integer> updateById(@RequestBody User user) {
 		user.setId(id); // 아이디 설정
 		userService.update(user);
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);

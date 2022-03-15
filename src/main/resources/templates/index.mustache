@@ -38,6 +38,8 @@
 	  <input type="hidden" class="form-control" id="open-time" value="{{ops-time.openTime}}">
 	  <input type="hidden" class="form-control" id="close-time" value="{{ops-time.closeTime}}">
 	  <input type="hidden" class="form-control" id="appt-interval" value="{{ops-time.apptInterval}}">
+	  <input type="hidden" class="form-control" id="start-break-time" value="{{ops-time.startBreakTime}}">
+	  <input type="hidden" class="form-control" id="end-break-time" value="{{ops-time.endBreakTime}}">
 	  <input type="hidden" class="form-control" id="appts" value="{{appts}}">
     	
 	  <div class="date-picker-2" id="appt-date" aria-describedby="basic-addon2"></div> <!-- inline display -->
@@ -59,12 +61,11 @@
       <input type="text" class="form-control" placeholder="010-1234-5678" id="client-phone">
     </div>
     <br />
-    
-  	<div class="form-group">    
-   	  <button type="button" id="btn-save" class="btn btn-success">예약하기</button>    
-   	  <button type="button" id="btn-update-delete" class="btn btn-warning">변경/취소</button>    
-  	</div>
   </form>
+  <div class="form-group">    
+   	<button type="button" id="btn-save" class="btn btn-success">예약하기</button>    
+   	<button type="button" id="btn-update-delete" class="btn btn-warning">변경/취소</button>    
+  </div>  
 </div>
 </body>
   
