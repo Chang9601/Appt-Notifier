@@ -25,6 +25,9 @@ public interface ApptRepository extends JpaRepository<Appointment, Integer> {
 	// TO-DO: 오류 원인 파악
 	//Page<Appointment> findByClientNameAndClientPhone(String clientName, String clientPhone, Pageable pageable);
 	
+	// 이전 예약 모두 삭제
+	void deleteByApptDateBefore(Date today);
+	
 	/*
 	// 예약 취소
 	@Modifying 	// executeUpdate 실행

@@ -27,7 +27,7 @@ public class UserService {
 	}
 	
 	// 관리자 갱신
-	public void update(User user) {
+	public void updateById(User user) {
 		User persistence = userRepository.findById(user.getId()).orElse(null); // 없을 경우 null 반환
 		persistence.setPassword(user.getPassword());
 	}

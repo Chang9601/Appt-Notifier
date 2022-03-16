@@ -51,18 +51,22 @@ public class ApptService {
 	}
 	
 	// 예약취소
-	public void delete(int id) {
+	public void deleteById(int id) {
 		apptRepository.deleteById(id);
 	}
 	
 	// 예약변경
-	public void update(int id, Appointment appointment) {
+	public void updateById(int id, Appointment appointment) {
 		Appointment persistence = apptRepository.findById(id).orElse(null);
 		
 		persistence.setApptDate(appointment.getApptDate());
 		persistence.setApptTime(appointment.getApptTime());
 	}
 	
+	public void deletebyApptDateBefore(Date today) {
+		apptRepository.deleteByApptDateBefore(today);
+	}
+ 	
 	// 중복 확인, 내부 함수라서 private 지시어
 	private void validateDuplicate(Date apptDate, String apptTime) {
 		List<Appointment> list = apptRepository.findByApptDateAndApptTime(apptDate, apptTime);

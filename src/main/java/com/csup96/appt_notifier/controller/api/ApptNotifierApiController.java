@@ -47,14 +47,14 @@ public class ApptNotifierApiController {
 	
 	@DeleteMapping("/delete/{id}")
 	public ResponseDTO<Integer> deleteById(@PathVariable int id) {
-		apptService.delete(id);
+		apptService.deleteById(id);
 		
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}		
 	
 	@PutMapping("/update/{id}")
 	public ResponseDTO<Integer> updateById(@PathVariable int id, @RequestBody Appointment appointment) {
-		apptService.update(id, appointment);
+		apptService.updateById(id, appointment);
 		
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}		

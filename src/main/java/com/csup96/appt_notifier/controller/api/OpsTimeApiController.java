@@ -25,7 +25,6 @@ public class OpsTimeApiController {
 	
 	@PostMapping("/save")
 	public ResponseDTO<Integer> save(@RequestBody OpsTime opsTime) {
-		System.out.println("시간: " + opsTime);
 		opsTimeService.save(opsTime);
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}

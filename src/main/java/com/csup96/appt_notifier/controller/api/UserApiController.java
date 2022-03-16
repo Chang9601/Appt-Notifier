@@ -38,7 +38,7 @@ public class UserApiController {
 	@PutMapping("/update")
 	public ResponseDTO<Integer> updateById(@RequestBody User user) {
 		user.setId(id); // 아이디 설정
-		userService.update(user);
+		userService.updateById(user);
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
 	}
 }

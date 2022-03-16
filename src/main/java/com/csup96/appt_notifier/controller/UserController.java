@@ -1,5 +1,6 @@
 package com.csup96.appt_notifier.controller;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -12,6 +13,7 @@ public class UserController {
 	 * 아이디: admin 고정, 비밀번호: 수정 가능
 	 * 
 	 * */
+	
 	@GetMapping("/login")
 	public String login() {
 		return "login";
