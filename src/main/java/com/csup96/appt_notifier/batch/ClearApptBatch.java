@@ -11,7 +11,7 @@ import com.csup96.appt_notifier.service.ApptService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Component
+@Component // Spring Container에 해당 클래스 Bean으로 등록
 public class ClearApptBatch {
 	
 	@Autowired
@@ -20,8 +20,8 @@ public class ClearApptBatch {
 	private final Date today = new Date(new java.util.Date().getTime()); // 오늘 날짜
 	
 	// 초 분 시 일 월 주
-	// 하루가 지나면 이전 예약 모두 자동 삭제
-	@Scheduled(cron = "0 26 * * * *", zone = "Asia/Seoul")
+	// 하루가 지나면 이전 예약 모두 자동 삭제 0 0 0 * * * 
+	@Scheduled(cron = "0 42 * * * *", zone = "Asia/Seoul")
 	public void clearApptDB() {
 		apptService.deletebyApptDateBefore(today);
 	}

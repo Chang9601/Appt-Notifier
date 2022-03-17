@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.csup96.appt_notifier.dto.ResponseDTO;
+import com.csup96.appt_notifier.dto.ResponseDto;
 import com.csup96.appt_notifier.model.OpsTime;
 import com.csup96.appt_notifier.service.OpsTimeService;
 
@@ -24,21 +24,21 @@ public class OpsTimeApiController {
 	private final int id = 1;	
 	
 	@PostMapping("/save")
-	public ResponseDTO<Integer> save(@RequestBody OpsTime opsTime) {
+	public ResponseDto<Integer> save(@RequestBody OpsTime opsTime) {
 		opsTimeService.save(opsTime);
-		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
+		return new ResponseDto<Integer>(HttpStatus.OK.value(), 0);
 	}
 	
 	@GetMapping("/find")
-	public ResponseDTO<OpsTime> findById(OpsTime opsTime) {
+	public ResponseDto<OpsTime> findById(OpsTime opsTime) {
 		OpsTime persistence = opsTimeService.findById(id);
-		return new ResponseDTO<OpsTime>(HttpStatus.OK.value(), persistence);
+		return new ResponseDto<OpsTime>(HttpStatus.OK.value(), persistence);
 	}
 	
 	@PutMapping("/update")
-	public ResponseDTO<Integer> updateById(@RequestBody OpsTime opsTime) {
+	public ResponseDto<Integer> updateById(@RequestBody OpsTime opsTime) {
 		opsTime.setId(id);
-		opsTimeService.update(opsTime);
-		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 0);
+		opsTimeService.updateById(opsTime);
+		return new ResponseDto<Integer>(HttpStatus.OK.value(), 0);
 	}
 }

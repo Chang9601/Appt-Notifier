@@ -25,8 +25,9 @@ public class OpsTimeService {
 	}
 	
 	// 영업시간 갱신
-	public void update(OpsTime opsTime) {
+	public void updateById(OpsTime opsTime) {
 		OpsTime persistence = opsTimeRepository.findById(opsTime.getId()).orElse(null);
+		
 		persistence.setOpenTime(opsTime.getOpenTime());
 		persistence.setCloseTime(opsTime.getCloseTime());
 		persistence.setStartBreakTime(opsTime.getStartBreakTime());

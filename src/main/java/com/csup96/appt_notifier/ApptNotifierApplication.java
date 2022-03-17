@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableAutoConfiguration(exclude = {org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration.class})
-@EnableScheduling
+@EnableScheduling // 스케줄링을 허용하는 어노테이션
 @SpringBootApplication
 public class ApptNotifierApplication {
 

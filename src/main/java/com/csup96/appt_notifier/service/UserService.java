@@ -13,7 +13,7 @@ import com.csup96.appt_notifier.repository.UserRepository;
 public class UserService {
 
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	
 	// 관리자 저장
 	public void save(User user) {
@@ -28,7 +28,8 @@ public class UserService {
 	
 	// 관리자 갱신
 	public void updateById(User user) {
-		User persistence = userRepository.findById(user.getId()).orElse(null); // 없을 경우 null 반환
+		User persistence = userRepository.findById(user.getId()).orElse(null);
+		
 		persistence.setPassword(user.getPassword());
 	}
 }

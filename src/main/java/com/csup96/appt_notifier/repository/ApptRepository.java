@@ -28,14 +28,14 @@ public interface ApptRepository extends JpaRepository<Appointment, Integer> {
 	// 이전 예약 모두 삭제
 	void deleteByApptDateBefore(Date today);
 	
-	/*
-	// 예약 취소
-	@Modifying 	// executeUpdate 실행
-	@Transactional
-	@Query(value = "DELETE FROM appointment WHERE client_name = :client_name AND client_phone = :client_phone", nativeQuery = true)
-	void deleteByNameAndPhone(@Param("client_name") String clientName, @Param("client_phone") String clientPhone);
-	*/
-	
 	// 날짜와 시간으로 검색, derived의 경우 이름은 필드와 동일
 	List<Appointment> findByApptDateAndApptTime(Date apptDate, String apptTime);
 }
+
+/*
+// 예약 취소
+@Modifying 	// executeUpdate 실행
+@Transactional
+@Query(value = "DELETE FROM appointment WHERE client_name = :client_name AND client_phone = :client_phone", nativeQuery = true)
+void deleteByNameAndPhone(@Param("client_name") String clientName, @Param("client_phone") String clientPhone);
+*/
