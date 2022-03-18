@@ -41,7 +41,7 @@ public class SmsApi {
 		reqBody.setContentType("COMM");
 		reqBody.setCountryCode("82");
 		reqBody.setFrom("");
-		reqBody.setContent("1번째 문자");
+		reqBody.setContent("APPT_NOTIFIER");
 		reqBody.setMessages(messages);
 		
 		Gson gson = new Gson();

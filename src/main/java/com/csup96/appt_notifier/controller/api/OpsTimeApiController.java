@@ -13,7 +13,7 @@ import com.csup96.appt_notifier.dto.ResponseDto;
 import com.csup96.appt_notifier.model.OpsTime;
 import com.csup96.appt_notifier.service.OpsTimeService;
 
-@RequestMapping("/api/ops-time/*")
+@RequestMapping("/admin/ops-time/*")
 @RestController
 public class OpsTimeApiController {
 	

@@ -1,6 +1,5 @@
 package com.csup96.appt_notifier.controller;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -14,13 +13,13 @@ public class UserController {
 	 * 
 	 * */
 	
-	@GetMapping("/login")
+	@GetMapping("/loginForm")
 	public String login() {
 		return "login";
 	}
 	
-	@GetMapping("/admin")
-	public String admin() {
-		return "admin";
+	@GetMapping("/admin/setting")
+	public String setting() {
+		return "setting";
 	}
 }

@@ -9,6 +9,37 @@ let appt = {
 	}
 };
 
+// 사용자 유효성
+const validateAppt = (clientName, clientPhone, apptTime) => {
+
+	if(apptTime === '0') {
+		alert('예약 시간을 선택해주세요.');
+		return false;
+	}
+
+	if (clientName === '') {
+		alert('이름을 입력하세요.');
+		return false;
+	}
+
+	if (!clientName.match(/^[\uAC00-\uD7A3]+$/)) { // 한글 유니코드
+		alert('한글만 입력하세요.');
+		return false;
+	}
+
+	if (clientPhone === '') {
+		alert('전화번호를 입력하세요.');
+		return false;
+	}
+
+	if (clientPhone !== '' && !clientPhone.match(/^010-\d{4}-\d{4}$/)) { // 010-1234-5678
+		alert('전화번호를 형식에 맞게 입력하세요.');
+		return false;
+	}
+
+	return true;
+};
+
 // 문자열 숫자 -> 정수 숫자
 const decodeTime = (apptTime) => {
 	apptTime = apptTime.split(':');
@@ -109,10 +140,10 @@ $(function() {
 			let openTime = decodeTime(document.querySelector('#open-time').value);
 			let closeTime = decodeTime(document.querySelector('#close-time').value);
 			let startBreakTime = decodeTime(document.querySelector('#start-break-time').value);
-			let endBreakTime = decodeTime(document.querySelector('#end-break-time').value);			
+			let endBreakTime = decodeTime(document.querySelector('#end-break-time').value);
 			let apptInterval = parseInt(document.querySelector('#appt-interval').value); // 문자열 -> 숫자 변환
-			let appts = JSON.parse(document.querySelector("#appts").value); // 예약명단
-
+			let appts = JSON.parse(document.querySelector("#appts").value); // 예약명단, JSON 파싱
+			
 			let html = '';
 			let cnt = 0;
 			
@@ -151,73 +182,91 @@ $(function() {
 	});
 });
 
-document.querySelector('#btn-update').addEventListener('click', () => {
-	
-	let ok = confirm('예약을 변경하시겠습니까?');
-	
-	if(!ok) {
-		return;
-	}
+let index = {
+	// 중첩 함수를 화살표 함수가 아니라 function으로 정의할 경우
+	// 중첩 함수가 메서드로 호출: this 값은 호출한 객체
+	// 중첩 함수가 함수로 호출: this 값은 전역 객체 혹은 undefined
+	// 1. this 값을 변수에 저장, 2. 화살표 함수(this 값을 상속받는다.) 3. bind() 메서드 호출
+	init: function() {
+		document.querySelector('#btn-save').addEventListener('click', () => {
+			this.save();
+		});
+		
+		document.querySelector('#btn-update-delete').addEventListener('click', () => {
+			this.updateOrDelete();
+		});
+	},
 
-	let id = document.querySelector('#appt-id').value;
-	let apptDate = document.querySelector('#appt-date').value;
-	let apptTime = appt.getApptTime();
-	let clientName = document.querySelector('#client-name').value;
-	let clientPhone = document.querySelector('#client-phone').value;	
-	
-	if(apptTime === '0') {
-		alert('예약 시간을 선택해주세요.');
-		return false;
-	}
-	
-	let data = {
-		apptDate: apptDate,
-		apptTime: apptTime
-	};
-	
-	$.ajax({
-		type: 'PUT',
-		url: `/api/appt/update/${id}`,
-		data: JSON.stringify(data),
-		contentType: 'application/json; charset=UTF-8', // 서버에 요청하는 자료형		
-		dataType: 'json' // 서버가 응답하는 자료형
-	}).done(function(resp) {
-		alert('예약이 변경되었습니다.');
-		location.replace(`/client/update-delete?clientName=${clientName}&clientPhone=${clientPhone}`);
-	}).fail(function(error) {
-		alert(JSON.stringify(error));
-	});
-});
+	save: function() {
+		let apptDate = document.querySelector('#appt-date').value;
+		let apptTime = appt.getApptTime();
+		let clientName = document.querySelector('#client-name').value;
+		let clientPhone = document.querySelector('#client-phone').value;
 
-document.querySelector('#btn-cancel').addEventListener('click', () => {
-	
-	let ok = confirm('예약목록으로 돌아가시겠습니까?');
-	
-	if(!ok) {
-		return;
-	}
+		if (!validateAppt(clientName, clientPhone, apptTime)) return;
 
-	let id = document.querySelector('#appt-id').value;
-	let apptDate = document.querySelector('#appt-date').value;
-	let apptTime = appt.getApptTime();
-	let clientName = document.querySelector('#client-name').value;
-	let clientPhone = document.querySelector('#client-phone').value;	
+		let data = {
+			apptDate: apptDate,
+			apptTime: apptTime,
+			clientName: clientName,
+			clientPhone: clientPhone
+		};
 	
-	let data = {
-		apptDate: apptDate,
-		apptTime: apptTime
-	};
+		$.ajax({
+			type: 'GET',
+			url: '/appt/find-by-date',
+			data: { apptDate: apptDate, apptTime: apptTime },
+			contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // 서버에 요청하는 자료형
+			dataType: 'json' // 서버가 응답하는 자료형			
+		}).done(function(resp){
+			if(resp.data !== null) {
+				alert('이미 예약 되었습니다.');
+				return;
+			}
+			
+			$.ajax({
+				type: 'POST',
+				url: '/appt/save',
+				data: JSON.stringify(data),
+				contentType: 'application/json; charset=UTF-8', // 서버에 요청하는 자료형
+				dataType: 'json' // 서버가 응답하는 자료형						
+			}).done(function(resp){
+				alert('예약이 완료되었습니다.');
+			}).fail(function(error){
+				alert(JSON.stringify(error));				
+			});
+		}).fail(function(error){
+			alert(JSON.stringify(error));
+		});
+	},
 	
-	$.ajax({
-		type: 'PUT',
-		url: `/api/appt/update/${id}`,
-		data: JSON.stringify(data),
-		contentType: 'application/json; charset=UTF-8', // 서버에 요청하는 자료형		
-		dataType: 'json' // 서버가 응답하는 자료형
-	}).done(function(resp) {
-		alert('예약이 변경되었습니다.');
-		location.replace(`/client/update-delete?clientName=${clientName}&clientPhone=${clientPhone}`);
-	}).fail(function(error) {
-		alert(JSON.stringify(error));
-	});
-});
+	updateOrDelete: function() {
+		let ok = confirm('예약을 변경 및 취소하시겠습니까?');
+
+		if (!ok) {
+			return;	
+		}
+
+		let clientName = prompt('이름');
+		let clientPhone = prompt('전화번호');
+
+		$.ajax({
+			type: 'GET',
+			url: '/appt/find-all-by-name',
+			data: { clientName: clientName, clientPhone: clientPhone },
+			contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // 서버에 요청하는 자료형
+			dataType: 'json' // 서버가 응답하는 자료형
+		}).done(function(resp) {
+			if (resp.data === null) {
+				alert('입력하신 정보와 일치하는 예약이 없습니다.');
+				return;
+			}
+			location.replace(`/appt/update-delete?clientName=${clientName}&clientPhone=${clientPhone}`);
+
+		}).fail(function(error) {
+			alert(JSON.stringify(error));
+		});
+	}
+}
+
+index.init();

@@ -67,7 +67,7 @@ const validateOpsTime = (openTime, closeTime, breakTime, apptInterval) => {
 	return true;
 };
 
-let admin = {
+let setting = {
 	init: function() {
 		document.querySelector('#btn-save-user').addEventListener('click', () => {
 			this.saveUser();
@@ -94,18 +94,17 @@ let admin = {
 
 		$.ajax({
 			type: 'GET',
-			url: '/api/user/find',
+			url: '/admin/find',
 			dataType: 'json' // 서버가 응답하는 자료형
 		}).done(function(resp) {
-
 			let url, type;
 			if (resp.data === null) {
 				type = 'POST';
-				url = '/api/user/save';
+				url = '/admin/save';
 			}
 			else {
 				type = 'PUT';
-				url = '/api/user/update';
+				url = '/admin/update';
 			}
 
 			$.ajax({
@@ -116,7 +115,7 @@ let admin = {
 				dataType: 'json' // 서버가 응답하는 자료형				
 			}).done(function(resp) {
 				alert('비밀번호 설정이 완료됐습니다.');
-			}).fail(function() {
+			}).fail(function(error) {
 				alert(JSON.stringify(error));
 			});
 
@@ -149,18 +148,18 @@ let admin = {
 		
 		$.ajax({
 			type: 'GET',
-			url: '/api/ops-time/find',
+			url: '/admin/ops-time/find',
 			dataType: 'json' // 서버가 응답하는 자료형
 		}).done(function(resp) {
 			
 			let url, type;
 			if (resp.data === null) {
 				type = 'POST';
-				url = '/api/ops-time/save';
+				url = '/admin/ops-time/save';
 			}
 			else {
 				type = 'PUT';
-				url = '/api/ops-time/update';
+				url = '/admin/ops-time/update';
 			}
 			
 			$.ajax({
@@ -181,4 +180,4 @@ let admin = {
 	},
 }
 
-admin.init();
+setting.init();

@@ -6,10 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.csup96.appt_notifier.config.auth.PrincipalDetails;
 import com.csup96.appt_notifier.model.Appointment;
 import com.csup96.appt_notifier.service.ApptService;
 import com.csup96.appt_notifier.service.OpsTimeService;
@@ -29,8 +31,9 @@ public class ApptNotifierController {
 	private final int id = 1;
 	
 	// 예약표
-	@GetMapping("/index")
+	@GetMapping({"/index", "/", ""})
 	public String index(Model model) {		
+		
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create(); // 날짜 형식 설정
 		String json = gson.toJson(apptService.findAll()); // 예약시간, Java 객체 <-> JSON <-> JavaScript 객체
 		
@@ -41,7 +44,7 @@ public class ApptNotifierController {
 	}
 	
 	// 예약명단
-	@GetMapping("/appt")
+	@GetMapping("/admin/appt")
 	public String appts(Model model, @PageableDefault(size = 5) 
 		@SortDefault.SortDefaults({
 			@SortDefault(sort = "apptDate", direction = Sort.Direction.ASC), // 날짜 기준 정렬, sort 자바 필드
@@ -61,7 +64,7 @@ public class ApptNotifierController {
 	}
 	
 	// 예약변경 및 예약취소 명단
-	@GetMapping("/client/update-delete")
+	@GetMapping("/appt/update-delete")
 	public String updateOrDelete(String clientName, String clientPhone, Model model, @PageableDefault(size = 5) 
 	@SortDefault.SortDefaults({
 		@SortDefault(sort = "appt_date", direction = Sort.Direction.ASC), // native Query 사용 시 DB 컬럼명
@@ -80,7 +83,7 @@ public class ApptNotifierController {
 	}
 	
 	// 예약변경 예약표
-	@GetMapping("/update-index")
+	@GetMapping("/appt/update-index")
 	public String updateIndex(Model model, int apptId, String clientName, String clientPhone) {
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create(); // 날짜 형식 설정
 		String json = gson.toJson(apptService.findAll()); // 예약시간, Java 객체 <-> JSON <-> JavaScript 객체

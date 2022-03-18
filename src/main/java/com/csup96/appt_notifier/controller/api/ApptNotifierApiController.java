@@ -22,7 +22,7 @@ import com.csup96.appt_notifier.dto.ResponseDto;
 import com.csup96.appt_notifier.model.Appointment;
 import com.csup96.appt_notifier.service.ApptService;
 
-@RequestMapping("/api/appt/*")
+@RequestMapping("/appt/*")
 @RestController
 public class ApptNotifierApiController {
 

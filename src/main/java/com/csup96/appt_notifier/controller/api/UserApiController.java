@@ -13,7 +13,7 @@ import com.csup96.appt_notifier.dto.ResponseDto;
 import com.csup96.appt_notifier.model.User;
 import com.csup96.appt_notifier.service.UserService;
 
-@RequestMapping("/api/user/*")
+@RequestMapping("/admin/*")
 @RestController
 public class UserApiController {
 	

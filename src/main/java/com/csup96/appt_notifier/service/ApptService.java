@@ -33,17 +33,12 @@ public class ApptService {
 	public void save(Appointment appointment) throws InvalidKeyException, RestClientException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
 		Date sqlDate = new Date(appointment.getApptDate().getTime());
 		
-		System.out.println(appointment.getApptDate());
-		System.out.println(appointment.getApptTime());
-		System.out.println(appointment.getClientName());
-		System.out.println(appointment.getClientPhone());
-
 		// 중복확인
 		validateDuplicate(sqlDate, appointment.getApptTime());
 		// SMS 전송
 		apptRepository.save(appointment);
-		System.out.println("번호: " + smsNumber(appointment.getClientPhone()));
-		System.out.println("내용: " + smsContent(appointment, " 예약이 완료되었습니다. "));
+		//System.out.println("번호: " + smsNumber(appointment.getClientPhone()));
+		//System.out.println("내용: " + smsContent(appointment, " 예약이 완료되었습니다. "));
 		//smsApi.sendSmsMsg(smsNumber(appointment.getClientPhone()), smsContent(appointment,  " 예약이 완료되었습니다. "));
 	}
 	
@@ -73,7 +68,7 @@ public class ApptService {
 	// 예약취소 - SMS
 	public void deleteById(int id) throws InvalidKeyException, RestClientException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
 		Appointment persistence = apptRepository.findById(id).orElse(null);
-		System.out.println("내용: " + smsContent(persistence, " 예약이 취소되었습니다. "));		
+		//System.out.println("내용: " + smsContent(persistence, " 예약이 취소되었습니다. "));		
 		
 		apptRepository.deleteById(id);
 		//smsApi.sendSmsMsg(smsNumber(persistence.getClientPhone()), smsContent(persistence,  " 예약이 취소되었습니다. "));
@@ -86,7 +81,7 @@ public class ApptService {
 		persistence.setApptDate(appointment.getApptDate());
 		persistence.setApptTime(appointment.getApptTime());
 		
-		System.out.println("내용: " + smsContent(persistence, "로 예약이 변경되었습니다. "));		
+		//System.out.println("내용: " + smsContent(persistence, "로 예약이 변경되었습니다. "));		
 		
 		//smsApi.sendSmsMsg(smsNumber(persistence.getClientPhone()), smsContent(persistence,  "로 예약이 변경되었습니다. "));
 	}
