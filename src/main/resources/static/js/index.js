@@ -95,12 +95,23 @@ const isBetweenBreakTime = (startBreakTime, endBreakTime, startApptTime, endAppt
 	return true;	
 };
 
+// 현재 시간 계산
 const computeNow = (now) => {
 	now = now.split(':');
 	now = now[0] + ':' + now[1];
 	now = decodeTime(now);	
 	
 	return now;
+};
+
+// 휴무일 계산
+const computeDayOff = (date, dayOff, dayOffArr) => {
+	let day = date.getDay();
+	
+	if(day === dayOff) {
+		let strDate = jQuery.datepicker.formatDate('yy-mm-dd', date)
+		dayOffArr.push(strDate);
+	}
 };
 
 $(function() {
@@ -129,9 +140,18 @@ $(function() {
 		}
 	});
 
+	let dayOffArr = [];
+	let dayOff = parseInt(document.querySelector('#day-off').value);
+	
 	$('#appt-date').datepicker({
 		minDate: '0', // 선택 가능한 날짜의 최솟값, 0은 오늘
 		maxDate: '+1m',  // 선택 가능한 날짜의 최댓값, 오늘부터 한달
+		
+		beforeShowDay: function(date) {
+			computeDayOff(date, dayOff, dayOffArr);
+			let strDate = jQuery.datepicker.formatDate('yy-mm-dd', date);
+        	return [dayOffArr.indexOf(strDate) == -1];
+		},
 
 		onSelect: function(date) {
 			let dateArr = date.split('-');
@@ -162,7 +182,7 @@ $(function() {
 				html += `<button type="button" ${disable} class="btn btn-info" name="appt-time" value=${time} onclick="appt.setApptTime(this.value)">${formatHour(initTime)}:${formatMinute(initTime)}</button>`;
 
 				cnt++;
-				if (cnt % 6 === 0) // TO-DO: 한 줄당 예약 시간의 개수
+				if (cnt % 6 === 0) // 한 줄당 예약 시간의 개수
 					html += '<br><br>';
 			}
 

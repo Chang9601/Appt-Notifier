@@ -42,10 +42,22 @@
       <input type="text" class="form-control" id="break-time" placeholder="12:00 - 13:00" name="break-time">
     </div>
     <div class="mb-3 mt-3">
-      <label for="break-time">예약 시간 간격(분)</label>
+      <label for="appt-interval">예약 시간 간격(분)</label>
       <input type="text" class="form-control" id="appt-interval" placeholder="10, 20, 30, 40, 50, 60 중 하나" name="appt-interval">
     </div>
-    
+	<div class="mb-3 mt-3">    
+      <label for="day-off">휴무일</label>	
+	  <select id="day-off" class="form-select" aria-label="Default select example">
+	    <option selected>---</option>
+		<option value="1">월요일</option>
+		<option value="2">화요일</option>
+		<option value="3">수요일</option>
+		<option value="4">목요일</option>
+		<option value="5">금요일</option>
+		<option value="6">토요일</option>
+		<option value="0">일요일</option>
+	  </select>   
+	</div> 
   </form>
   <button type="button" id="btn-save-time" class="btn btn-success">설정하기</button>  
 </div>

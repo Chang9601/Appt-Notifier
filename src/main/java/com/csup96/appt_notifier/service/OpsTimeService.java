@@ -33,5 +33,6 @@ public class OpsTimeService {
 		persistence.setStartBreakTime(opsTime.getStartBreakTime());
 		persistence.setEndBreakTime(opsTime.getEndBreakTime());		
 		persistence.setApptInterval(opsTime.getApptInterval());
+		persistence.setDayOff(opsTime.getDayOff());
 	}
 }

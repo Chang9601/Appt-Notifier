@@ -21,7 +21,7 @@ public class ClearApptBatch {
 	
 	// 초 분 시 일 월 주
 	// 하루가 지나면 이전 예약 모두 자동 삭제 0 0 0 * * * 
-	@Scheduled(cron = "0 42 * * * *", zone = "Asia/Seoul")
+	@Scheduled(cron = "0 7 * * * *", zone = "Asia/Seoul")
 	public void clearApptDB() {
 		apptService.deletebyApptDateBefore(today);
 	}

@@ -21,7 +21,7 @@ const validateUser = (password, cpassword) => {
 	return true;
 };
 
-const validateOpsTime = (openTime, closeTime, breakTime, apptInterval) => {
+const validateOpsTime = (openTime, closeTime, breakTime, apptInterval, dayOff) => {
 	const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/;
 	
 	if (openTime === '') {
@@ -61,6 +61,11 @@ const validateOpsTime = (openTime, closeTime, breakTime, apptInterval) => {
 	
 	if (!apptInterval.match(/^[1-6]0$/)) {
 		alert('10, 20, 30, 40, 50, 60 중 하나를 입력하세요');
+		return false;
+	}
+	
+	if(dayOff === '---') {
+		alert('휴무일을 선택해주세요.');
 		return false;
 	}
 
@@ -129,10 +134,13 @@ let setting = {
 		let closeTime = document.querySelector('#close-time').value;
 		let breakTime = document.querySelector('#break-time').value;
 		let apptInterval = document.querySelector('#appt-interval').value;
+		let dayOff = document.querySelector('#day-off').value;
 
-		if (!validateOpsTime(openTime, closeTime, breakTime, apptInterval)) {
+		if (!validateOpsTime(openTime, closeTime, breakTime, apptInterval, dayOff)) {
 			return false;
 		}
+		
+		console.log('요일: ' + dayOff);
 		
 		breakTime = parseTime(breakTime);
 		breakTime[0] = breakTime[0].trim();
@@ -143,7 +151,8 @@ let setting = {
 			closeTime: closeTime,
 			startBreakTime: breakTime[0],
 			endBreakTime: breakTime[1],
-			apptInterval: apptInterval
+			apptInterval: apptInterval,
+			dayOff: dayOff
 		};
 		
 		$.ajax({

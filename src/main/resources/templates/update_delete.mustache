@@ -69,11 +69,6 @@
 </body>
 
 <script>
-	// 뒤로가기 금지
-	function disableBack() { window.history.forward(); }
-	setTimeout("disableBack()", 0);
-	window.onunload = function () { null };
-
 	const query = {
 		id: '0',
 		apptDate: '0',
@@ -125,7 +120,7 @@
 			let id = query.getId();
 			let clientName = query.getClientName();
 			let clientPhone = query.getClientPhone();
-			location.replace(`/update-index?apptId=${id}&clientName=${clientName}&clientPhone=${clientPhone}`);
+			location.replace(`/appt/update-index?apptId=${id}&clientName=${clientName}&clientPhone=${clientPhone}`);
 		});
 		
 		$('.a-delete').click(function() {
@@ -139,7 +134,7 @@
 
 			$.ajax({
 				type: 'DELETE',
-				url: `/api/appt/delete/${id}`,
+				url: `/appt/delete/${id}`,
 				dataType: 'json' // 서버가 응답하는 자료형
 			}).done(function(resp) {
 				alert('예약이 취소되었습니다.');

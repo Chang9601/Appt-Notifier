@@ -6,12 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.csup96.appt_notifier.config.auth.PrincipalDetails;
 import com.csup96.appt_notifier.model.Appointment;
 import com.csup96.appt_notifier.service.ApptService;
 import com.csup96.appt_notifier.service.OpsTimeService;
@@ -39,8 +37,8 @@ public class ApptNotifierController {
 		
 		model.addAttribute("ops-time", opsTimeService.findById(id)); // 영업 시간
 		model.addAttribute("appts", json); // 예약 시간
-		
-		return "index"; // templates/index.mustache 이동
+						// mustache 기본 폴더: src/main/resources/
+		return "index"; // src/main/resources/templates/index.mustache 이동
 	}
 	
 	// 예약명단

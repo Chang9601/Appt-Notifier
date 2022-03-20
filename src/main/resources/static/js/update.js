@@ -64,12 +64,23 @@ const isBetweenBreakTime = (startBreakTime, endBreakTime, startApptTime, endAppt
 	return true;	
 };
 
+// 현재 시간 계산
 const computeNow = (now) => {
 	now = now.split(':');
 	now = now[0] + ':' + now[1];
 	now = decodeTime(now);	
 	
 	return now;
+};
+
+// 휴무일 계산
+const computeDayOff = (date, dayOff, dayOffArr) => {
+	let day = date.getDay();
+	
+	if(day === dayOff) {
+		let strDate = jQuery.datepicker.formatDate('yy-mm-dd', date)
+		dayOffArr.push(strDate);
+	}
 };
 
 $(function() {
@@ -98,10 +109,19 @@ $(function() {
 		}
 	});
 
+	let dayOffArr = [];
+	let dayOff = parseInt(document.querySelector('#day-off').value);
+	
 	$('#appt-date').datepicker({
 		minDate: '0', // 선택 가능한 날짜의 최솟값, 0은 오늘
 		maxDate: '+1m',  // 선택 가능한 날짜의 최댓값, 오늘부터 한달
 
+		beforeShowDay: function(date) {
+			computeDayOff(date, dayOff, dayOffArr);
+			let strDate = jQuery.datepicker.formatDate('yy-mm-dd', date);
+        	return [dayOffArr.indexOf(strDate) == -1];
+		},
+		
 		onSelect: function(date) {
 			let dateArr = date.split('-');
 			let year, month, day;
@@ -192,32 +212,12 @@ document.querySelector('#btn-update').addEventListener('click', () => {
 document.querySelector('#btn-cancel').addEventListener('click', () => {
 	
 	let ok = confirm('예약목록으로 돌아가시겠습니까?');
+	let clientName = document.querySelector('#client-name').value;
+	let clientPhone = document.querySelector('#client-phone').value;	
 	
 	if(!ok) {
 		return;
 	}
-
-	let id = document.querySelector('#appt-id').value;
-	let apptDate = document.querySelector('#appt-date').value;
-	let apptTime = appt.getApptTime();
-	let clientName = document.querySelector('#client-name').value;
-	let clientPhone = document.querySelector('#client-phone').value;	
 	
-	let data = {
-		apptDate: apptDate,
-		apptTime: apptTime
-	};
-	
-	$.ajax({
-		type: 'PUT',
-		url: `/appt/update/${id}`,
-		data: JSON.stringify(data),
-		contentType: 'application/json; charset=UTF-8', // 서버에 요청하는 자료형		
-		dataType: 'json' // 서버가 응답하는 자료형
-	}).done(function(resp) {
-		alert('예약이 변경되었습니다.');
-		location.replace(`/appt/update-delete?clientName=${clientName}&clientPhone=${clientPhone}`);
-	}).fail(function(error) {
-		alert(JSON.stringify(error));
-	});
+	location.replace(`/appt/update-delete?clientName=${clientName}&clientPhone=${clientPhone}`);
 });

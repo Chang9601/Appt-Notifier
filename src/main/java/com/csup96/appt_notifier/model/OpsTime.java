@@ -34,5 +34,7 @@ public class OpsTime {
 	@Column(nullable = false, length = 50)
 	private String endBreakTime; // 휴식 끝
 	
+	private int dayOff; // 휴무일, 월요일 - 일요일 (0 - 6)
+	
 	private int apptInterval; // interval가 MySQL 예약어라서 오류 발생!
 }

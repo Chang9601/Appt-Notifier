@@ -42,6 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.formLogin()  
 				.loginPage("/")// 기본 페이지
 				.loginProcessingUrl("/login") // Spring Security가 해당 주소의 로그인 요청을 가로채서 대신 로그인
-				.defaultSuccessUrl("/");
+				.defaultSuccessUrl("/admin/setting"); // 문제?
 	}
 }
