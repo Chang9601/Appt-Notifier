@@ -7,7 +7,6 @@ build/
 
 ### MY ###
 src/main/resources/application.yml
-src/main/java/com/csup96/appt_notifier/api/SmsApi.java
 
 ### STS ###
 .apt_generated
