@@ -39,7 +39,7 @@ public class ApptService {
 		apptRepository.save(appointment);
 		//System.out.println("번호: " + smsNumber(appointment.getClientPhone()));
 		//System.out.println("내용: " + smsContent(appointment, " 예약이 완료되었습니다. "));
-		//smsApi.sendSmsMsg(smsNumber(appointment.getClientPhone()), smsContent(appointment,  " 예약이 완료되었습니다. "));
+		smsApi.sendSmsMsg(smsNumber(appointment.getClientPhone()), smsContent(appointment,  " 예약이 완료되었습니다. "));
 	}
 	
 	// 예약명단 - 페이지 적용
@@ -53,12 +53,12 @@ public class ApptService {
 	}
 	
 	// 예약찾기 - 이름과 전화번호
-	public Page<Appointment> findByNameAndPhone(String clientName, String clientPhone, Pageable pageable) { // Page count 쿼리 사용 X
+	public Page<Appointment> findByClientNameAndClientPhone(String clientName, String clientPhone, Pageable pageable) { // Page count 쿼리 사용 X
 		return apptRepository.findByClientNameAndClientPhone(clientName, clientPhone, pageable);//apptRepository.findAllByNameAndPhone(clientName, clientPhone, pageable);
 	}
 	
 	// 예약찾기 - 날짜와 시간
-	public Appointment findByDateAndTime(String apptDate, String apptTime) {
+	public Appointment findByApptDateAndApptTime(String apptDate, String apptTime) {
 		Date sqlDate = Date.valueOf(apptDate);
 		List<Appointment> list = apptRepository.findByApptDateAndApptTime(sqlDate, apptTime);
 		
@@ -71,7 +71,7 @@ public class ApptService {
 		//System.out.println("내용: " + smsContent(persistence, " 예약이 취소되었습니다. "));		
 		
 		apptRepository.deleteById(id);
-		//smsApi.sendSmsMsg(smsNumber(persistence.getClientPhone()), smsContent(persistence,  " 예약이 취소되었습니다. "));
+		smsApi.sendSmsMsg(smsNumber(persistence.getClientPhone()), smsContent(persistence,  " 예약이 취소되었습니다. "));
 	}
 	
 	// 예약변경 - SMS
@@ -83,14 +83,13 @@ public class ApptService {
 		
 		//System.out.println("내용: " + smsContent(persistence, "로 예약이 변경되었습니다. "));		
 		
-		//smsApi.sendSmsMsg(smsNumber(persistence.getClientPhone()), smsContent(persistence,  "로 예약이 변경되었습니다. "));
+		smsApi.sendSmsMsg(smsNumber(persistence.getClientPhone()), smsContent(persistence,  "로 예약이 변경되었습니다. "));
 	}
 	
 	// 이전 예약 모두 삭제
 	public void deletebyApptDateBefore(Date today) {
 		apptRepository.deleteByApptDateBefore(today);
 	}
- 	
 	
 	// 중복 확인, 내부 함수라서 private 지시어
 	private void validateDuplicate(Date apptDate, String apptTime) {
@@ -124,7 +123,7 @@ public class ApptService {
 				.append(clientName + "님 ")
 				.append(formattedDate + " ")
 				.append(apptTime + "시" + status)
-				.append("https://www.youtube.com/를 통해서 예약 변경 및 취소를 하실 수 있습니다.");
+				.append("웹 사이트 주소: http://3.38.92.88:5000/");
 		 
 		return buf.toString();
 	}

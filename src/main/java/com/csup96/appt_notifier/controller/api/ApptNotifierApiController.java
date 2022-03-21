@@ -38,7 +38,7 @@ public class ApptNotifierApiController {
 	
 	@GetMapping("/find-all-by-name")
 	public ResponseDto<Page<Appointment>> findByNameAndPhone(String clientName, String clientPhone) {
-		Page<Appointment> ret = apptService.findByNameAndPhone(clientName, clientPhone, null); // Pageable 없으니까 null
+		Page<Appointment> ret = apptService.findByClientNameAndClientPhone(clientName, clientPhone, null); // Pageable 없으니까 null
 		ret = ret.isEmpty() ? null : ret;
 		
 		return new ResponseDto<Page<Appointment>>(HttpStatus.OK.value(), ret);
@@ -46,7 +46,7 @@ public class ApptNotifierApiController {
 	
 	@GetMapping("/find-by-date")
 	public ResponseDto<Appointment> findByDateAndTime(String apptDate, String apptTime) {
-		Appointment ret = apptService.findByDateAndTime(apptDate, apptTime);
+		Appointment ret = apptService.findByApptDateAndApptTime(apptDate, apptTime);
 		
 		return new ResponseDto<Appointment>(HttpStatus.OK.value(), ret);
 	}	
