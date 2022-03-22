@@ -54,7 +54,7 @@
    * NAVERE Simple & Easy Notification Service API 사용
 
 5. 오류
-  * 맞춤 오류 페이지를 통해서 4xx, 5xx 오류 제어
+   * 맞춤 오류 페이지를 통해서 4xx, 5xx 오류 제어
 
 6. 관리자
    * 계점 시간, 폐점 시간, 휴식 시간, 예약 시간 간격, 휴무일 설정
